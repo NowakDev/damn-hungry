@@ -49,7 +49,7 @@ class NavBar extends React.Component {
           >
             <MenuIcon />
           </IconButton>
-          <Link to={'/damn-hungry-recipes'} style={styles.link}>
+          <Link to={'/'} style={styles.link}>
             <Typography
               style={styles.title}
             >

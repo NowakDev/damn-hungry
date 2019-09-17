@@ -8,7 +8,7 @@ import NavBar from './components/navigation/NavBar'
 
 const App = props => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <NavBar />
       <Switch>
         <Route path={'/'} component={ListOfRecipes} exact />
