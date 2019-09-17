@@ -1,9 +1,11 @@
 import React from 'react'
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
+
+import GridList from '@material-ui/core/GridList'
+import GridListTile from '@material-ui/core/GridListTile'
+import GridListTileBar from '@material-ui/core/GridListTileBar'
+import { Typography } from '@material-ui/core'
+
+import { mapObjectToArray } from '../../services/mapObjectToArray'
 
 const styles = {
   root: {
@@ -12,56 +14,48 @@ const styles = {
     justifyContent: 'space-around',
     overflow: 'hidden',
     marginTop: 5,
-    cursor: 'pointer'
   },
   gridList: {
     maxWidth: 1000,
     height: '100%',
+    justifyContent: 'center'
   },
-  icon: {
-    color: 'rgba(255, 255, 255, 0.54)',
+  recipe: {
+    minWidth: 150,
+    cursor: 'pointer'
   }
 }
 
-/**
- * The example data is structured as follows:
- *
- * import image from 'path/to/image.jpg';
- * [etc...]
- *
- * const tileData = [
- *   {
- *     img: image,
- *     title: 'Image',
- *     author: 'author',
- *   },
- *   {
- *     [etc...]
- *   },
- * ];
- */
-
 class ListOfRecipes extends React.Component {
   state = {
+    recipes: []
+  }
 
+  componentDidMount() {
+    const recipesURL = 'https://damn-hungry-recipes-123ed.firebaseio.com/recipes/.json'
+    fetch(recipesURL)
+      .then(resp => resp.json())
+      .then((data) => mapObjectToArray(data))
+      .then((data) => this.setState({
+        recipes: data
+      }))
   }
 
   render() {
+    console.log(this.state)
     return (
       <div style={styles.root}>
-        <GridList cellHeight={180} style={styles.gridList} onClick={(e) => console.log(e.target)}>
-          {['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'].map(recipe => (
-            <GridListTile key={recipe}>
-              <img src='https://assets3.thrillist.com/v1/image/2797371/size/tmg-article_default_mobile.jpg' alt={recipe} />
+        <GridList cellHeight={180} style={styles.gridList}>
+          {this.state.recipes.map(recipe => (
+            <GridListTile key={recipe.key} style={styles.recipe} onClick={() => { }}>
+              <img src={recipe.img} alt={recipe.title} />
               <GridListTileBar
-                title={recipe}
-                subtitle={<span>by: {recipe}</span>}
-                actionIcon={
-                  <IconButton aria-label={`info about ${recipe}`} style={styles.icon}>
-                    <InfoIcon />
-                  </IconButton>
-                }
+                title={recipe.title}
+                subtitle={<span>by: {recipe.author}</span>}
               />
+              <Typography>
+                {recipe.date}
+              </Typography>
             </GridListTile>
           ))}
         </GridList>
