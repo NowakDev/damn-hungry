@@ -3,9 +3,10 @@ import React from 'react'
 import GridList from '@material-ui/core/GridList'
 import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
-import { Typography } from '@material-ui/core'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
 
-import { mapObjectToArray } from '../../services/mapObjectToArray'
+import { getRecipes } from '../../services/fetchService'
 
 const styles = {
   root: {
@@ -23,42 +24,62 @@ const styles = {
   recipe: {
     minWidth: 150,
     cursor: 'pointer'
+  },
+  div: {
+    display: 'flex',
+    alignItems: 'center',
+    margin: '6px 0px',
+  },
+  progress: {
+    marginTop: 50
   }
 }
 
 class ListOfRecipes extends React.Component {
   state = {
-    recipes: []
+    recipes: [],
+    isFetching: true
   }
 
   componentDidMount() {
-    const recipesURL = 'https://damn-hungry-recipes-123ed.firebaseio.com/recipes/.json'
-    fetch(recipesURL)
-      .then(resp => resp.json())
-      .then((data) => mapObjectToArray(data))
-      .then((data) => this.setState({
-        recipes: data
+    getRecipes()
+      .then((recipes) => this.setState({
+        recipes: recipes,
+        isFetching: false
       }))
   }
 
   render() {
-    console.log(this.state)
     return (
       <div style={styles.root}>
-        <GridList cellHeight={180} style={styles.gridList}>
-          {this.state.recipes.map(recipe => (
-            <GridListTile key={recipe.key} style={styles.recipe} onClick={() => { }}>
-              <img src={recipe.img} alt={recipe.title} />
-              <GridListTileBar
-                title={recipe.title}
-                subtitle={<span>by: {recipe.author}</span>}
-              />
-              <Typography>
-                {recipe.date}
-              </Typography>
-            </GridListTile>
-          ))}
-        </GridList>
+        {this.state.isFetching ?
+          <CircularProgress style={styles.progress} size={100} color='secondary' />
+          :
+          <GridList cellHeight={180} style={styles.gridList}>
+            {this.state.recipes.map(recipe => (
+              <GridListTile key={recipe.key} style={styles.recipe} onClick={() => { }}>
+                <img src={recipe.img} alt={recipe.title} />
+                <GridListTileBar
+                  title={recipe.title}
+                  subtitle={
+                    <div>
+                      <span>by: {recipe.author}</span>
+                      <div
+                        style={styles.div}
+                      >
+                        <AccessTimeIcon
+                          style={{ marginRight: 5 }}
+                          fontSize='small'
+                        />
+                        {recipe.cookingTime} hr
+                      </div>
+                    </div>
+                  }
+                />
+              </GridListTile>
+            ))}
+          </GridList>
+        }
       </div>
     )
   }
