@@ -14,7 +14,7 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
-    marginTop: 5,
+    margin: 5,
   },
   gridList: {
     maxWidth: 1000,
@@ -28,7 +28,7 @@ const styles = {
   div: {
     display: 'flex',
     alignItems: 'center',
-    margin: '6px 0px',
+    margin: '6px auto',
   },
   progress: {
     marginTop: 50
@@ -58,7 +58,7 @@ class ListOfRecipes extends React.Component {
           <GridList cellHeight={180} style={styles.gridList}>
             {this.state.recipes.map(recipe => (
               <GridListTile key={recipe.key} style={styles.recipe} onClick={() => { }}>
-                <img src={recipe.img} alt={recipe.title} />
+                <img src={recipe.img} alt={`img ${recipe.title}`} />
                 <GridListTileBar
                   title={recipe.title}
                   subtitle={
@@ -71,7 +71,7 @@ class ListOfRecipes extends React.Component {
                           style={{ marginRight: 5 }}
                           fontSize='small'
                         />
-                        {recipe.cookingTime} hr
+                        {recipe.cookingTime} min
                       </div>
                     </div>
                   }

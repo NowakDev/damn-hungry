@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import ListOfRecipes from './containers/listOfRecipes/ListOfRecipes'
-import CreateRecipeForm from './containers/createRecipeForm/CreateRecipeForm'
+import CreateRecipe from './containers/createRecipeForm/CreateRecipe'
 import NavBar from './components/navigation/NavBar'
 
 
@@ -13,7 +13,7 @@ const App = props => {
       <Switch>
         <Route path={'/'} component={ListOfRecipes} exact />
         <Route path={'/damn-hungry-recipes'} component={ListOfRecipes} />
-        <Route path={'/create-recipe-form'} component={CreateRecipeForm} />
+        <Route path={'/create-recipe'} component={CreateRecipe} />
       </Switch>
     </BrowserRouter>
   )

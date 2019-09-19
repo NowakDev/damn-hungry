@@ -17,7 +17,7 @@ const NavDrawer = props => {
           toggleDrawerStatus={props.toggleDrawerStatus}
         />
         <NavDrawerLink
-          to={'/create-recipe-form'}
+          to={'/create-recipe'}
           label={'Create New Recipe'}
           toggleDrawerStatus={props.toggleDrawerStatus}
         />
