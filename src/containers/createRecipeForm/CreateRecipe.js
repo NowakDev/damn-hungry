@@ -125,15 +125,22 @@ class CreateRecipe extends React.Component {
     const { title, ingredients, description, cookingTime, imgUrl } = this.state.errors
     const inputsFilled = recipe.cookingTime && recipe.description && recipe.ingredients && recipe.imgUrl && recipe.title
     const noError = !inputsFilled || title || ingredients || description || cookingTime || imgUrl
+    const helperText = {
+      title: 'Title too short! Pass a title which describes your meal.',
+      ingredients: 'Pass all ingredients in your meal.',
+      description: 'Describe steps needed to prepare your meal.',
+      cookingTime: 'No one cooks that fast :)',
+      imgUrl: 'Pass a valid image url. Accepted formats: gif, jpg, jpeg, tiff, png '
+    }
     return (
       // bug with cooking time field clearing to fix
       <div style={styles.formContainer}>
         <Paper style={styles.paper}>
           <TextField
-            // autoFocus
             label='title'
             error={errors.title}
             value={recipe.title}
+            helperText={errors.title ? helperText.title : null}
             onBlur={this.handleOnBlur('title')}
             handleInputChange={this.handleInputChange('title')}
           />
@@ -142,6 +149,7 @@ class CreateRecipe extends React.Component {
             multiline
             error={errors.ingredients}
             value={recipe.ingredients}
+            helperText={errors.ingredients ? helperText.ingredients : null}
             onBlur={this.handleOnBlur('ingredients')}
             handleInputChange={this.handleInputChange('ingredients')}
           />
@@ -151,12 +159,14 @@ class CreateRecipe extends React.Component {
             error={errors.description}
             multiline
             value={recipe.description}
+            helperText={errors.description ? helperText.description : null}
             onBlur={this.handleOnBlur('description')}
             handleInputChange={this.handleInputChange('description')}
           />
           <CookingTimeField
             error={errors.cookingTime}
             value={recipe.cookingTime}
+            helperText={errors.cookingTime ? helperText.cookingTime : null}
             onBlur={this.handleOnBlur('cookingTime')}
             handleInputChange={this.handleInputChange('cookingTime')}
           />
@@ -164,6 +174,7 @@ class CreateRecipe extends React.Component {
             label='img URL'
             error={errors.imgUrl}
             value={recipe.imgUrl}
+            helperText={errors.imgUrl ? helperText.imgUrl : null}
             onBlur={this.handleOnBlur('imgUrl')}
             handleInputChange={this.handleInputChange('imgUrl')}
           />
