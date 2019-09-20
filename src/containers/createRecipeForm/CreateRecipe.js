@@ -75,7 +75,7 @@ class CreateRecipe extends React.Component {
           }
         })
         break
-      case name === 'cookingTime' && event.target.value < 10:
+      case name === 'cookingTime' && event.target.value < 10 || event.target.value > 300:
         this.setState({
           errors: {
             ...this.state.errors,
@@ -129,7 +129,7 @@ class CreateRecipe extends React.Component {
       title: 'Title too short! Pass a title which describes your meal.',
       ingredients: 'Pass all ingredients in your meal.',
       description: 'Describe steps needed to prepare your meal.',
-      cookingTime: 'No one cooks that fast :)',
+      cookingTime: 'Think about that :) Pass time in minutes.',
       imgUrl: 'Pass a valid image url. Accepted formats: gif, jpg, jpeg, tiff, png '
     }
     return (

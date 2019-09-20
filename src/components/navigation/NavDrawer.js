@@ -12,7 +12,7 @@ const NavDrawer = props => {
         onClose={props.toggleDrawerStatus}
       >
         <NavDrawerLink
-          to={'/damn-hungry-recipes'}
+          to={'/'}
           label={'Damn Hungry Recipes'}
           toggleDrawerStatus={props.toggleDrawerStatus}
         />

@@ -7,6 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 
 import { getRecipes } from '../../services/fetchService'
+import RecipeDialog from './RecipeDialog'
 
 const styles = {
   root: {
@@ -38,7 +39,9 @@ const styles = {
 class ListOfRecipes extends React.Component {
   state = {
     recipes: [],
-    isFetching: true
+    isFetching: true,
+    isDialogOpen: false,
+    recipeToDisplay: {}
   }
 
   componentDidMount() {
@@ -49,15 +52,31 @@ class ListOfRecipes extends React.Component {
       }))
   }
 
+  handleOnClick = (recipeIndex) => {
+    const filteredRecipe = this.state.recipes[recipeIndex]
+    this.setState({
+      isDialogOpen: true,
+      recipeToDisplay: filteredRecipe
+    })
+  }
+
+  handleOnClose = () => {
+    this.setState({
+      ...this.state,
+      isDialogOpen: false
+    })
+  }
+
   render() {
+    const { author, date, title, ingredients, description, cookingTime, imgUrl } = this.state.recipeToDisplay
     return (
       <div style={styles.root}>
         {this.state.isFetching ?
           <CircularProgress style={styles.progress} size={100} color='secondary' />
           :
           <GridList cellHeight={180} style={styles.gridList}>
-            {this.state.recipes.map(recipe => (
-              <GridListTile key={recipe.key} style={styles.recipe} onClick={() => { }}>
+            {this.state.recipes.map((recipe, index) =>
+              <GridListTile key={recipe.key} style={styles.recipe} onClick={() => this.handleOnClick(index)}>
                 <img src={recipe.imgUrl} alt={`img ${recipe.title}`} />
                 <GridListTileBar
                   title={recipe.title}
@@ -77,7 +96,18 @@ class ListOfRecipes extends React.Component {
                   }
                 />
               </GridListTile>
-            ))}
+            )}
+            <RecipeDialog
+              onClose={this.handleOnClose}
+              open={this.state.isDialogOpen}
+              author={author}
+              title={title}
+              date={date}
+              ingredients={ingredients}
+              description={description}
+              cookingTime={cookingTime}
+              imgUrl={imgUrl}
+            />
           </GridList>
         }
       </div>
