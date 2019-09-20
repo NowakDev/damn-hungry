@@ -58,7 +58,7 @@ class ListOfRecipes extends React.Component {
           <GridList cellHeight={180} style={styles.gridList}>
             {this.state.recipes.map(recipe => (
               <GridListTile key={recipe.key} style={styles.recipe} onClick={() => { }}>
-                <img src={recipe.img} alt={`img ${recipe.title}`} />
+                <img src={recipe.imgUrl} alt={`img ${recipe.title}`} />
                 <GridListTileBar
                   title={recipe.title}
                   subtitle={

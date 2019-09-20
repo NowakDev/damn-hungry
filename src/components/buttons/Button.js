@@ -13,6 +13,7 @@ const Button = props => {
       color="secondary"
       variant='outlined'
       fullWidth
+      disabled={props.noError ? true : false}
       onClick={props.handleOnClick}
     >
       add recipe

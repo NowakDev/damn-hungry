@@ -62,26 +62,52 @@ class CreateRecipe extends React.Component {
     })
   }
 
-  formValidation = () => {
-    const { cookingTime, description, imgUrl, ingredients, title } = this.state.recipe
-
+  formValidation = (name, event) => {
+    const imgRegex = /\.(gif|jpg|jpeg|tiff|png)$/
     switch (true) {
-      case cookingTime < 10:
+      case name !== 'cookingTime'
+        && name !== 'imgUrl'
+        && event.target.value.length < 10:
         this.setState({
           errors: {
             ...this.state.errors,
-            cookingTime: true
+            [name]: true
+          }
+        })
+        break
+      case name === 'cookingTime' && event.target.value < 10:
+        this.setState({
+          errors: {
+            ...this.state.errors,
+            [name]: true
+          }
+        })
+        break
+      case name === 'imgUrl' && !imgRegex.test(event.target.value):
+        this.setState({
+          errors: {
+            ...this.state.errors,
+            [name]: true
           }
         })
         break
 
       default:
-        return this.state.recipe
+        this.setState({
+          errors: {
+            ...this.state.errors,
+            [name]: false
+          }
+        })
+        break
     }
   }
 
+  handleOnBlur = (name) => (event) => {
+    this.formValidation(name, event)
+  }
+
   handleOnClick = () => {
-    this.formValidation()
     const date = Date().substring(0, 24)
     this.setState({
       recipe: {
@@ -95,42 +121,56 @@ class CreateRecipe extends React.Component {
   }
 
   render() {
-
-    const { cookingTime, description, imgUrl, ingredients, title } = this.state.recipe
+    const { recipe, errors } = this.state
+    const { title, ingredients, description, cookingTime, imgUrl } = this.state.errors
+    const inputsFilled = recipe.cookingTime && recipe.description && recipe.ingredients && recipe.imgUrl && recipe.title
+    const noError = !inputsFilled || title || ingredients || description || cookingTime || imgUrl
     return (
       // bug with cooking time field clearing to fix
       <div style={styles.formContainer}>
         <Paper style={styles.paper}>
           <TextField
-            autoFocus
+            // autoFocus
             label='title'
-            value={title}
+            error={errors.title}
+            value={recipe.title}
+            onBlur={this.handleOnBlur('title')}
             handleInputChange={this.handleInputChange('title')}
           />
           <TextField
             label='ingredients'
             multiline
-            value={ingredients}
+            error={errors.ingredients}
+            value={recipe.ingredients}
+            onBlur={this.handleOnBlur('ingredients')}
             handleInputChange={this.handleInputChange('ingredients')}
           />
           <TextField
             label='description'
             rows='10'
+            error={errors.description}
             multiline
-            value={description}
+            value={recipe.description}
+            onBlur={this.handleOnBlur('description')}
             handleInputChange={this.handleInputChange('description')}
           />
           <CookingTimeField
-            error={this.state.errors.cookingTime}
-            value={cookingTime}
+            error={errors.cookingTime}
+            value={recipe.cookingTime}
+            onBlur={this.handleOnBlur('cookingTime')}
             handleInputChange={this.handleInputChange('cookingTime')}
           />
           <TextField
             label='img URL'
-            value={imgUrl}
+            error={errors.imgUrl}
+            value={recipe.imgUrl}
+            onBlur={this.handleOnBlur('imgUrl')}
             handleInputChange={this.handleInputChange('imgUrl')}
           />
-          <Button handleOnClick={this.handleOnClick} />
+          <Button
+            handleOnClick={this.handleOnClick}
+            noError={noError}
+          />
         </Paper>
       </div>
     )
