@@ -8,19 +8,17 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime'
 
 import { getRecipes } from '../../services/fetchService'
 import RecipeDialog from './RecipeDialog'
+import Filters from '../../components/filters/Filters'
 
 const styles = {
   root: {
     display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    margin: 5,
+    justifyContent: 'center',
+    margin: 5
   },
   gridList: {
     maxWidth: 1000,
-    height: '100%',
-    justifyContent: 'center'
+    width: '100%'
   },
   recipe: {
     minWidth: 150,
@@ -28,11 +26,21 @@ const styles = {
   },
   div: {
     display: 'flex',
+    width: '100%',
+    maxWidth: 1000,
     alignItems: 'center',
     margin: '6px auto',
   },
   progress: {
     marginTop: 50
+  },
+  img: {
+    maxWidth: 600,
+    maxHeight: 600,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    overflow: 'hidden'
   }
 }
 
@@ -41,22 +49,35 @@ class ListOfRecipes extends React.Component {
     recipes: [],
     isFetching: true,
     isDialogOpen: false,
-    recipeToDisplay: {}
+    recipeToDisplay: {},
+    filteredRecipes: []
   }
 
   componentDidMount() {
     getRecipes()
       .then((recipes) => this.setState({
         recipes: recipes,
+        filteredRecipes: recipes,
         isFetching: false
       }))
   }
 
-  handleOnClick = (recipeIndex) => {
-    const filteredRecipe = this.state.recipes[recipeIndex]
+  handleOnClick = (key) => {
+    const clickedRecipe = this.state.recipes.filter(recipe => recipe.key === key)
     this.setState({
       isDialogOpen: true,
-      recipeToDisplay: filteredRecipe
+      recipeToDisplay: clickedRecipe[0]
+    })
+  }
+
+  handleSearch = (event) => {
+    const { value } = event.target
+    const search = value.toLowerCase()
+    const { recipes } = this.state
+    const filteredRecipes = recipes && recipes.filter(recipe => recipe.ingredients.includes(search))
+    this.setState({
+      ...this.state,
+      filteredRecipes
     })
   }
 
@@ -74,41 +95,47 @@ class ListOfRecipes extends React.Component {
         {this.state.isFetching ?
           <CircularProgress style={styles.progress} size={100} color='secondary' />
           :
-          <GridList cellHeight={180} style={styles.gridList}>
-            {this.state.recipes.map((recipe, index) =>
-              <GridListTile key={recipe.key} style={styles.recipe} onClick={() => this.handleOnClick(index)}>
-                <img src={recipe.imgUrl} alt={`img ${recipe.title}`} />
-                <GridListTileBar
-                  title={recipe.title}
-                  subtitle={
-                    <div>
-                      <span>by: {recipe.author}</span>
-                      <div
-                        style={styles.div}
-                      >
-                        <AccessTimeIcon
-                          style={{ marginRight: 5 }}
-                          fontSize='small'
-                        />
-                        {recipe.cookingTime} min
-                      </div>
-                    </div>
-                  }
-                />
-              </GridListTile>
-            )}
-            <RecipeDialog
-              onClose={this.handleOnClose}
-              open={this.state.isDialogOpen}
-              author={author}
-              title={title}
-              date={date}
-              ingredients={ingredients}
-              description={description}
-              cookingTime={cookingTime}
-              imgUrl={imgUrl}
+          <div style={styles.gridList}>
+            <Filters
+              handleSearch={this.handleSearch}
+
             />
-          </GridList>
+            <GridList cellHeight={200}>
+              {this.state.filteredRecipes.map((recipe) =>
+                <GridListTile key={recipe.key} style={styles.recipe} onClick={() => this.handleOnClick(recipe.key)}>
+                  <img style={styles.img} src={recipe.imgUrl} alt={`img ${recipe.title}`} />
+                  <GridListTileBar
+                    title={recipe.title}
+                    subtitle={
+                      <div>
+                        <span>by: {recipe.author}</span>
+                        <div
+                          style={styles.div}
+                        >
+                          <AccessTimeIcon
+                            style={{ marginRight: 5 }}
+                            fontSize='small'
+                          />
+                          {recipe.cookingTime} min
+                      </div>
+                      </div>
+                    }
+                  />
+                </GridListTile>
+              )}
+              <RecipeDialog
+                onClose={this.handleOnClose}
+                open={this.state.isDialogOpen}
+                author={author}
+                title={title}
+                date={date}
+                ingredients={ingredients}
+                description={description}
+                cookingTime={cookingTime}
+                imgUrl={imgUrl}
+              />
+            </GridList>
+          </div>
         }
       </div>
     )

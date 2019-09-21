@@ -75,7 +75,8 @@ class CreateRecipe extends React.Component {
           }
         })
         break
-      case name === 'cookingTime' && event.target.value < 10 || event.target.value > 300:
+      case name === 'cookingTime'
+        && (event.target.value < 10 || event.target.value > 300):
         this.setState({
           errors: {
             ...this.state.errors,
@@ -83,7 +84,8 @@ class CreateRecipe extends React.Component {
           }
         })
         break
-      case name === 'imgUrl' && !imgRegex.test(event.target.value):
+      case name === 'imgUrl'
+        && !imgRegex.test(event.target.value):
         this.setState({
           errors: {
             ...this.state.errors,

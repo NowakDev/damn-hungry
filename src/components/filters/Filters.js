@@ -1,17 +1,61 @@
 import React from 'react'
 
-class Filters extends React.Component {
-  state = {
+import Paper from '@material-ui/core/Paper'
+import InputBase from '@material-ui/core/InputBase'
+import SearchIcon from '@material-ui/icons/Search'
+import { Button } from '@material-ui/core'
 
+const styles = {
+  root: {
+    margin: '5px auto',
+    padding: 5,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  input: {
+    display: 'flex',
+    width: '100%',
+    maxWidth: 500,
+    border: '1px solid rgba(0, 0, 0, 0.23)',
+    borderRadius: 5
+  },
+  button: {
+    maxWidth: 500,
+    width: '100%',
+    padding: 5,
+    marginTop: 7
+  },
+  iconButton: {
+    padding: 7
   }
+}
 
-  render() {
-    return (
-      <div>
-        Filters
+const Filters = (props) => {
+  return (
+    <Paper style={styles.root}>
+      <div style={styles.input}>
+        <InputBase
+          style={{ paddingLeft: 10 }}
+          fullWidth
+          onChange={props.handleSearch}
+          placeholder="Search by ingredients"
+          inputProps={{
+            'aria-label': 'search recipe by ingredients',
+          }}
+        />
+        <SearchIcon style={styles.iconButton} />
       </div>
-    )
-  }
+      <Button
+        style={styles.button}
+        variant='outlined'
+        onClick={props.handleUsersRecipes}
+      >
+        your recipes
+        </Button>
+    </Paper>
+  )
 }
 
 export default Filters
