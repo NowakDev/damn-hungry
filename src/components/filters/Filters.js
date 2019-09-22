@@ -8,16 +8,16 @@ import { Button } from '@material-ui/core'
 const styles = {
   root: {
     margin: '5px auto',
-    padding: 5,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100%'
   },
   input: {
     display: 'flex',
     width: '100%',
     maxWidth: 500,
+    margin: 5,
     border: '1px solid rgba(0, 0, 0, 0.23)',
     borderRadius: 5
   },
@@ -25,7 +25,7 @@ const styles = {
     maxWidth: 500,
     width: '100%',
     padding: 5,
-    marginTop: 7
+    margin: 5
   },
   iconButton: {
     padding: 7
