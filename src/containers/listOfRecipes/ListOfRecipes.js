@@ -25,8 +25,8 @@ const styles = {
     alignItems: 'center'
   },
   recipe: {
-    minWidth: 150,
-    cursor: 'pointer'
+    cursor: 'pointer',
+    width: '100%'
   },
   div: {
     display: 'flex',
@@ -110,9 +110,9 @@ class ListOfRecipes extends React.Component {
             {this.state.filteredRecipes.length === 0 ?
               <Typography>No results. Please try again.</Typography>
               :
-              <GridList cellHeight={200}>
+              <GridList cellHeight={200} style={styles.recipe}>
                 {this.state.filteredRecipes && this.state.filteredRecipes.map((recipe) =>
-                  <GridListTile key={recipe.key} style={styles.recipe} onClick={() => this.handleOnClick(recipe.key)}>
+                  <GridListTile key={recipe.key} onClick={() => this.handleOnClick(recipe.key)}>
                     <img style={styles.img} src={recipe.imgUrl} alt={`img ${recipe.title}`} />
                     <GridListTileBar
                       title={recipe.title}
