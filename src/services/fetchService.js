@@ -26,4 +26,3 @@ export const removeRecipe = (key) => {
       method: 'DELETE',
     })
 }
-

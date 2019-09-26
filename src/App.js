@@ -12,6 +12,7 @@ const App = props => {
       <NavBar />
       <Switch>
         <Route path={'/'} component={ListOfRecipes} exact />
+        <Route path={'/recipes/:key?'} component={ListOfRecipes} exact />
         <Route path={'/create-recipe'} component={CreateRecipe} />
       </Switch>
     </BrowserRouter>

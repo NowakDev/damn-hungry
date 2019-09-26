@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import GridList from '@material-ui/core/GridList'
 import GridListTile from '@material-ui/core/GridListTile'
@@ -8,6 +10,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import { Typography } from '@material-ui/core'
 
 import { getRecipes } from '../../services/fetchService'
+import { getRecipesAsyncActionCreator } from '../../state/reducers/recipes'
 import RecipeDialog from './RecipeDialog'
 import Filters from '../../components/filters/Filters'
 
@@ -25,7 +28,6 @@ const styles = {
     alignItems: 'center'
   },
   recipe: {
-    cursor: 'pointer',
     width: '100%'
   },
   div: {
@@ -54,16 +56,29 @@ class ListOfRecipes extends React.Component {
     isFetching: true,
     isDialogOpen: false,
     recipeToDisplay: {},
-    filteredRecipes: []
+    search: ''
   }
 
   componentDidMount() {
+    this.props._getRecipes()
+    const { key } = this.props.match.params
     getRecipes()
       .then((recipes) => this.setState({
         recipes: recipes,
         filteredRecipes: recipes,
         isFetching: false
-      }))
+      }, () => {
+        if (key) {
+          const recipeToDisplay = this.state.recipes.filter(recipe => (
+            recipe.key === key)
+          )
+          this.setState({
+            isDialogOpen: true,
+            recipeToDisplay: recipeToDisplay[0]
+          })
+        }
+      }
+      ))
   }
 
   handleOnClick = (key) => {
@@ -77,19 +92,15 @@ class ListOfRecipes extends React.Component {
   }
 
   handleSearch = (event) => {
-    const { value } = event.target
-    const search = value.toLowerCase()
-    const { recipes } = this.state
-    const filteredRecipes = recipes && recipes.filter(recipe => (
-      recipe.ingredients.toLowerCase().includes(search)
-    ))
+    const search = event.target.value.toLowerCase()
     this.setState({
       ...this.state,
-      filteredRecipes
-    }, () => console.log(filteredRecipes))
+      search
+    })
   }
 
   handleOnClose = () => {
+    this.props.history.push('/recipes')
     this.setState({
       ...this.state,
       isDialogOpen: false
@@ -97,23 +108,44 @@ class ListOfRecipes extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     const { author, date, title, ingredients, description, cookingTime, imgUrl } = this.state.recipeToDisplay
+    const { recipes, search } = this.state
+    const filteredRecipes = recipes && recipes.filter(recipe => (
+      recipe.ingredients.toLowerCase().includes(search)
+    ))
     return (
       <div style={styles.root}>
         {this.state.isFetching ?
-          <CircularProgress style={styles.progress} size={100} color='secondary' />
+          <CircularProgress
+            style={styles.progress}
+            size={100}
+            color='secondary'
+          />
           :
           <div style={styles.gridList}>
             <Filters
               handleSearch={this.handleSearch}
             />
-            {this.state.filteredRecipes.length === 0 ?
+            {filteredRecipes.length === 0 ?
               <Typography>No results. Please try again.</Typography>
               :
-              <GridList cellHeight={200} style={styles.recipe}>
-                {this.state.filteredRecipes && this.state.filteredRecipes.map((recipe) =>
-                  <GridListTile key={recipe.key} onClick={() => this.handleOnClick(recipe.key)}>
-                    <img style={styles.img} src={recipe.imgUrl} alt={`img ${recipe.title}`} />
+              <GridList
+                cellHeight={200}
+                style={styles.recipe}
+              >
+                {filteredRecipes.map((recipe) =>
+                  <GridListTile
+                    component={Link}
+                    to={`/recipes/${recipe.key}`}
+                    key={recipe.key}
+                    onClick={() => this.handleOnClick(recipe.key)}
+                  >
+                    <img
+                      style={styles.img}
+                      src={recipe.imgUrl}
+                      alt={`img ${recipe.title}`}
+                    />
                     <GridListTileBar
                       title={recipe.title}
                       subtitle={
@@ -153,4 +185,19 @@ class ListOfRecipes extends React.Component {
   }
 }
 
-export default ListOfRecipes
+const mapStateToProps = (state) => {
+  console.log(state)
+  return {
+    _recipes: state.recipes
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    _getRecipes: () => dispatch(getRecipesAsyncActionCreator())
+  }
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ListOfRecipes)
