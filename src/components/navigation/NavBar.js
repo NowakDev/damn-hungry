@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -7,6 +8,8 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import NavDrawer from './NavDrawer'
 import { Link } from 'react-router-dom'
+
+import { signedOutActionCreator } from '../../state/reducers/auth'
 
 const styles = {
   Toolbar: {
@@ -57,8 +60,9 @@ class NavBar extends React.Component {
           </Link>
           <Button
             color="inherit"
+            onClick={this.props._signOut}
           >
-            Login
+            sign out
             </Button>
         </Toolbar>
         <NavDrawer
@@ -70,4 +74,13 @@ class NavBar extends React.Component {
   }
 }
 
-export default NavBar
+const mapDispatchToProps = (dispatch) => {
+  return {
+    _signOut: () => (dispatch(signedOutActionCreator()))
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(NavBar)

@@ -50,7 +50,7 @@ export const fetchWithToken = (url, options) => (dispatch, getState) => {
     })
 }
 
-export const authFetch = (url, options) => (dispatch, getState) => {
+const authFetch = (url, options) => (dispatch, getState) => {
   dispatch(startFetchingActionCreator())
 
   return fetch(url, options)
@@ -97,16 +97,17 @@ export const checkIfUserIsSignedInAsyncActionCreator = () => (dispatch, getState
 
 export const signUpAsyncActionCreator = (email, password) => (dispatch, getState) => {
   dispatch(startFetchingActionCreator())
-  return authFetch(
+  return dispatch(authFetch(
     SIGN_UP_URL,
     {
       method: 'POST',
       body: JSON.stringify({
         email,
         password,
+        returnSecureToken: true
       })
     }
-  )
+  ))
     .then(data => {
       const user = jwt.decode(data.idToken)
       const key = user && user.user_id
@@ -124,7 +125,7 @@ export const signUpAsyncActionCreator = (email, password) => (dispatch, getState
 
 export const signInAsyncActionCreator = (email, password) => (dispatch, getState) => {
   dispatch(startFetchingActionCreator())
-  return authFetch(
+  return dispatch(authFetch(
     SIGN_IN_URL,
     {
       method: 'POST',
@@ -134,7 +135,7 @@ export const signInAsyncActionCreator = (email, password) => (dispatch, getState
         returnSecureToken: true
       })
     }
-  )
+  ))
 }
 
 export const refreshTokenAsyncActionCreator = () => (dispatch, getState) => {

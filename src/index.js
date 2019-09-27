@@ -4,10 +4,13 @@ import { Provider } from 'react-redux'
 
 import App from './App'
 import { store } from './store'
+import Auth from './containers/auth/Auth'
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Auth>
+      <App />
+    </Auth>
   </Provider>,
   document.querySelector('#root')
 )

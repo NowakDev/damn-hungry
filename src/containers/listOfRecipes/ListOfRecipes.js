@@ -9,7 +9,6 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import { Typography } from '@material-ui/core'
 
-import { getRecipes } from '../../services/fetchService'
 import { getRecipesAsyncActionCreator } from '../../state/reducers/recipes'
 import RecipeDialog from './RecipeDialog'
 import Filters from '../../components/filters/Filters'
@@ -52,7 +51,6 @@ const styles = {
 
 class ListOfRecipes extends React.Component {
   state = {
-    recipes: [],
     isFetching: true,
     isDialogOpen: false,
     recipeToDisplay: {},
@@ -60,16 +58,11 @@ class ListOfRecipes extends React.Component {
   }
 
   componentDidMount() {
-    this.props._getRecipes()
     const { key } = this.props.match.params
-    getRecipes()
-      .then((recipes) => this.setState({
-        recipes: recipes,
-        filteredRecipes: recipes,
-        isFetching: false
-      }, () => {
+    this.props._getRecipes()
+      .then(() => {
         if (key) {
-          const recipeToDisplay = this.state.recipes.filter(recipe => (
+          const recipeToDisplay = this.props._recipes.filter(recipe => (
             recipe.key === key)
           )
           this.setState({
@@ -77,12 +70,17 @@ class ListOfRecipes extends React.Component {
             recipeToDisplay: recipeToDisplay[0]
           })
         }
-      }
-      ))
+      }).then(() => {
+        this.setState({
+          ...this.state,
+          isFetching: false
+        })
+      })
   }
 
+
   handleOnClick = (key) => {
-    const clickedRecipe = this.state.recipes.filter(recipe => (
+    const clickedRecipe = this.props._recipes.filter(recipe => (
       recipe.key === key)
     )
     this.setState({
@@ -108,24 +106,25 @@ class ListOfRecipes extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const { author, date, title, ingredients, description, cookingTime, imgUrl } = this.state.recipeToDisplay
-    const { recipes, search } = this.state
-    const filteredRecipes = recipes && recipes.filter(recipe => (
+    const { isFetching, search } = this.state
+    const { _recipes } = this.props
+    const filteredRecipes = _recipes.filter(recipe => (
       recipe.ingredients.toLowerCase().includes(search)
     ))
     return (
       <div style={styles.root}>
-        {this.state.isFetching ?
+        {isFetching ?
           <CircularProgress
             style={styles.progress}
-            size={100}
+            size={50}
             color='secondary'
           />
           :
           <div style={styles.gridList}>
             <Filters
               handleSearch={this.handleSearch}
+              value={this.state.search}
             />
             {filteredRecipes.length === 0 ?
               <Typography>No results. Please try again.</Typography>
@@ -188,7 +187,7 @@ class ListOfRecipes extends React.Component {
 const mapStateToProps = (state) => {
   console.log(state)
   return {
-    _recipes: state.recipes
+    _recipes: state.recipes.data
   }
 }
 

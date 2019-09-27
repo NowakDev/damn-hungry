@@ -6,7 +6,7 @@ const GET = 'users/GET'
 
 export const getUsersAsyncActionCreator = (queryString = '') => (dispatch, getState) => {
 
-  return fetchWithToken(USERS_URL + '.json?' + queryString)
+  return dispatch(fetchWithToken(USERS_URL + '.json?' + queryString))
     .then(data => {
       const mappedData = mapObjectToArray(data)
       dispatch(getActionCreator(mappedData))

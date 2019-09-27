@@ -1,11 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { addRecipeAsyncActionCreator } from '../../state/reducers/recipes'
 
 import CookingTimeField from './CookingTimeField'
 import TextField from './TextField'
 import Paper from '@material-ui/core/Paper'
 
 import Button from '../../components/buttons/Button'
-import { addRecipe } from '../../services/fetchService'
 
 const styles = {
   formContainer: {
@@ -24,7 +25,7 @@ const styles = {
 const initialState = {
   recipe: {
     author: '',
-    cookingTime: 0,
+    cookingTime: null,
     date: '',
     description: '',
     imgUrl: '',
@@ -45,7 +46,7 @@ class CreateRecipe extends React.Component {
 
   clearInputs = () => {
     this.setState({
-      recipe: initialState.recipe
+      ...initialState
     })
   }
 
@@ -117,7 +118,7 @@ class CreateRecipe extends React.Component {
         date: date
       }
     }, () => {
-      addRecipe(this.state.recipe)
+      this.props._addRecipe(this.state.recipe)
       this.clearInputs()
     })
   }
@@ -190,4 +191,13 @@ class CreateRecipe extends React.Component {
   }
 }
 
-export default CreateRecipe
+const mapDispatchToProps = (dispatch) => {
+  return {
+    _addRecipe: (recipe) => dispatch(addRecipeAsyncActionCreator(recipe))
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(CreateRecipe)
