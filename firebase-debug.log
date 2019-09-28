@@ -20,3 +20,25 @@
 [debug] [2019-09-28T22:15:32.807Z] <<< HTTP RESPONSE 200
 [info] i  hosting: Serving hosting files from: build
 [info] ✔  hosting: Local server: http://localhost:5000
+[debug] [2019-09-28T22:30:46.243Z] ----------------------------------------------------------------------
+[debug] [2019-09-28T22:30:46.244Z] Command:       /home/kamil/.nvm/versions/node/v12.6.0/bin/node /home/kamil/.nvm/versions/node/v12.6.0/bin/firebase serve --only hosting
+[debug] [2019-09-28T22:30:46.244Z] CLI Version:   7.4.0
+[debug] [2019-09-28T22:30:46.244Z] Platform:      linux
+[debug] [2019-09-28T22:30:46.244Z] Node Version:  v12.6.0
+[debug] [2019-09-28T22:30:46.245Z] Time:          Sun Sep 29 2019 00:30:46 GMT+0200 (Central European Summer Time)
+[debug] [2019-09-28T22:30:46.245Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-09-28T22:30:46.249Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-09-28T22:30:46.249Z] > authorizing via signed-in user
+[debug] [2019-09-28T22:30:46.249Z] [iam] checking project damn-hungry-recipes-123ed for permissions ["firebase.projects.get"]
+[debug] [2019-09-28T22:30:46.250Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/damn-hungry-recipes-123ed:testIamPermissions  
+
+[debug] [2019-09-28T22:30:47.221Z] <<< HTTP RESPONSE 200
+[debug] [2019-09-28T22:30:47.226Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/damn-hungry-recipes-123ed  
+ 
+[debug] [2019-09-28T22:30:47.558Z] <<< HTTP RESPONSE 200
+[debug] [2019-09-28T22:30:47.561Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/damn-hungry-recipes-123ed/webApps/-/config  
+ 
+[debug] [2019-09-28T22:30:48.130Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: build
+[info] ✔  hosting: Local server: http://localhost:5000

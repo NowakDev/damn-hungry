@@ -28,6 +28,7 @@ const styles = {
   },
   gridList: {
     width: '100%',
+    marginBottom: 5,
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center'

@@ -11,6 +11,10 @@ import Button from '../../components/buttons/Button'
 import { CircularProgress, Typography } from '@material-ui/core'
 
 const styles = {
+  container: {
+    textAlign: 'center',
+    paddingBottom: 10
+  },
   formContainer: {
     margin: 'auto',
     marginTop: 10,
@@ -207,7 +211,7 @@ class CreateRecipe extends React.Component {
     }
     return (
 
-      <div style={{ textAlign: 'center' }}>
+      <div style={styles.container}>
         {this.props._isFetching ?
           <CircularProgress
             style={styles.progress}
