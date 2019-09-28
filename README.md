@@ -10,7 +10,6 @@ Simple application where you can browse different meal recipes and find some ins
 ### Rest API
 ### Firebase
 
+<br/>
 
-Hungry ? Sign up here: 
-
-[Damn Hungry!](https://damn-hungry-recipes-123ed.firebaseapp.com/)
+Hungry ? Sign up here:  [Damn Hungry!](https://damn-hungry-recipes-123ed.firebaseapp.com/)
