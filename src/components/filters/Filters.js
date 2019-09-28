@@ -8,12 +8,13 @@ import { Button } from '@material-ui/core'
 
 const styles = {
   root: {
-    marginBottom: 5,
     padding: 5,
+    marginBottom: 5,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    width: '100%',
+    width: 1000,
+    maxWidth: '95vw'
   },
   input: {
     display: 'flex',

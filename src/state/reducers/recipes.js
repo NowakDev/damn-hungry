@@ -14,15 +14,14 @@ export const getRecipesAsyncActionCreator = (queryString = '') => (dispatch) => 
     })
 }
 
-export const addRecipeAsyncActionCreator = (recipe, queryString = '', withSnackbars = true) => (dispatch, getState) => {
-  const auth = getState().auth
-  if (auth.idToken) return queryString = queryString + '&auth=' + auth.idToken
+export const addRecipeAsyncActionCreator = (recipe, queryString, withSnackbars = true) => (dispatch, getState) => {
 
   return dispatch(fetchWithToken(RECIPES_URL + '.json?' + queryString,
     {
       method: 'POST',
       body: JSON.stringify(recipe)
-    }))
+    }
+  ))
     .then((data) => {
       if (withSnackbars) {
         return dispatch(addSnackbarActionCreator('Recipe successfully added.', 'green'))

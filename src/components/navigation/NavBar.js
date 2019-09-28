@@ -29,6 +29,9 @@ const styles = {
   img: {
     marginTop: 5,
     maxHeight: 70
+  },
+  button: {
+    padding: '10px 0'
   }
 }
 
@@ -58,12 +61,15 @@ class NavBar extends React.Component {
           <Link to={'/'} style={styles.link}>
             <img style={styles.img} src='https://i.imgur.com/NptUAPg.png' alt='damn-hungry-logo' />
           </Link>
-          <Button
-            color="inherit"
-            onClick={this.props._signOut}
-          >
-            sign out
+          <Link to={'/'} style={styles.link}>
+            <Button
+              style={styles.button}
+              color="inherit"
+              onClick={this.props._signOut}
+            >
+              sign out
             </Button>
+          </Link>
         </Toolbar>
         <NavDrawer
           isDrawerOpened={this.state.isDrawerOpened}

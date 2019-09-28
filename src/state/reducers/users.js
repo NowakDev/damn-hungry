@@ -14,6 +14,16 @@ export const getUsersAsyncActionCreator = (queryString = '') => (dispatch, getSt
     })
 }
 
+export const addUserAsyncActionCreator = (user) => (dispatch, getState) => {
+
+  return dispatch(fetchWithToken(USERS_URL + '.json?',
+    {
+      method: 'POST',
+      body: JSON.stringify(user)
+    }
+  ))
+}
+
 const getActionCreator = (data) => ({
   type: GET,
   data

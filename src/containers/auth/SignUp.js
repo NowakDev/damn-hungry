@@ -4,24 +4,16 @@ import { Paper, TextField, Button, Typography, CircularProgress, Divider } from 
 
 const styles = {
   paper: {
-    width: 350,
-    height: 350,
-    padding: 25,
-    paddingBottom: 10,
-    maxWidth: '95%',
+    width: 500,
+    height: 550,
+    maxWidth: '95vw',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
     position: 'relative'
   },
-  signUpButton: {
-    margin: '15px auto',
-    maxWidth: 100
-  },
   div: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -29,89 +21,115 @@ const styles = {
     width: '100vw'
   },
   divider: {
-    marginTop: 15,
+    marginTop: 10,
     marginBottom: 10
   },
   signIn: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
-  button: {
+  signUpButton: {
+    margin: 15,
+    width: 100
+  },
+  signInButton: {
     margin: 5,
-    padding: 3
+    padding: 2,
+    width: 70
   },
   header: {
-    width: '100%',
-    textAlign: 'center'
+    width: '85%',
+    textAlign: 'center',
+    margin: '15px auto',
+    position: 'absolute',
+    top: 0
+  },
+  form: {
+    width: '80%',
+    marginTop: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    position: 'absolute'
   },
   footer: {
     position: 'absolute',
+    bottom: 0,
     width: '85%',
-    bottom: 10
+    margin: '10px auto'
   }
 }
 
 const SignUp = props => {
-  const enableSubmit = (
-    props.email.length > 0 &&
-    props.password.length > 0 &&
-    props.password1 === props.password &&
-    !props.errors.wrongEmail &&
-    !props.errors.passwordToShort &&
-    !props.errors.passwordsDontMatch
-  )
 
   return (
     <div style={styles.div}>
       <Paper style={styles.paper}>
         <div style={styles.header}>
-          <Typography variant={'h5'}>
-            SIGN UP
-        </Typography>
+          <img src='https://i.imgur.com/NptUAPg.png' alt='damn-hungry-logo' />
           <Divider style={styles.divider} />
         </div>
-        <TextField
-          value={props.email}
-          onChange={props.handleChange('email')}
-          error={props.errors.wrongEmail}
-          fullWidth
-          variant={'outlined'}
-          margin={'dense'}
-          label={"email"}
-          helperText={props.errors.wrongEmail ? "Invalid email." : ''}
-        />
-        <TextField
-          value={props.password}
-          onChange={props.handleChange('password')}
-          error={props.errors.passwordToShort}
-          fullWidth
-          variant={'outlined'}
-          margin={'dense'}
-          label={'password'}
-          type={'password'}
-          helperText={props.errors.passwordToShort ? "Password should contain at least 6 characters." : ''}
-        />
-        <TextField
-          value={props.password2}
-          onChange={props.handleChange('password1')}
-          error={props.errors.passwordsDontMatch}
-          fullWidth
-          variant={'outlined'}
-          margin={'dense'}
-          label={'confirm password'}
-          type={'password'}
-          helperText={props.errors.passwordsDontMatch ? "Both passwords must be equal." : ''}
-        />
-        <Button
-          onClick={props.handleSignUp}
-          style={styles.signUpButton}
-          variant={'outlined'}
-          color={'primary'}
-          disabled={!(enableSubmit)}
-        >
-          {props._isFetching ? <CircularProgress size={20} /> : 'sign up'}
-        </Button>
+        <form style={styles.form}>
+          <TextField
+            value={props.userName}
+            onBlur={props.onBlur('userNameError')}
+            onChange={props.handleChange('userName')}
+            error={props.errors.userNameError}
+            fullWidth
+            variant={'outlined'}
+            margin={'dense'}
+            label={"user name"}
+            helperText={props.errors.userNameError ?
+              "May include letters, numbers and underscore. Length of 3 to 20 characters."
+              :
+              ''
+            }
+          />
+          <TextField
+            value={props.email}
+            onBlur={props.onBlur('emailError')}
+            onChange={props.handleChange('email')}
+            error={props.errors.emailError}
+            fullWidth
+            variant={'outlined'}
+            margin={'dense'}
+            label={"email"}
+            helperText={props.errors.emailError ? "Invalid email." : ''}
+          />
+          <TextField
+            value={props.password}
+            onBlur={props.onBlur('passwordError')}
+            onChange={props.handleChange('password')}
+            error={props.errors.passwordError}
+            fullWidth
+            variant={'outlined'}
+            margin={'dense'}
+            label={'password'}
+            type={'password'}
+            helperText={props.errors.passwordError ? "Password should contain at least 6 characters." : ''}
+          />
+          <TextField
+            value={props.password1}
+            onBlur={props.onBlur('password1Error')}
+            onChange={props.handleChange('password1')}
+            error={props.errors.password1Error}
+            fullWidth
+            variant={'outlined'}
+            margin={'dense'}
+            label={'confirm password'}
+            type={'password'}
+            helperText={props.errors.password1Error ? "Both passwords must be equal." : ''}
+          />
+          <Button
+            onClick={props.handleSignUp}
+            style={styles.signUpButton}
+            variant={'outlined'}
+            color={'primary'}
+          >
+            {props._isFetching ? <CircularProgress size={20} /> : 'sign up'}
+          </Button>
+        </form>
         <div style={styles.footer}>
           <Divider style={styles.divider} />
           <div style={styles.signIn}>
@@ -120,7 +138,7 @@ const SignUp = props => {
             </Typography>
             <Button
               onClick={props.toggleForm}
-              style={styles.button}
+              style={styles.signInButton}
               margin='dense'
               variant={'outlined'}
               color={'secondary'}

@@ -14,7 +14,8 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    maxWidth: '500px'
+    width: 500,
+    maxWidth: '95vw'
   },
   paper: {
     padding: 15,
@@ -124,7 +125,7 @@ class CreateRecipe extends React.Component {
   }
 
   render() {
-    const { recipe, errors } = this.state
+    const { recipe } = this.state
     const { title, ingredients, description, cookingTime, imgUrl } = this.state.errors
     const inputsFilled = recipe.cookingTime && recipe.description && recipe.ingredients && recipe.imgUrl && recipe.title
     const noError = !inputsFilled || title || ingredients || description || cookingTime || imgUrl
@@ -141,43 +142,43 @@ class CreateRecipe extends React.Component {
         <Paper style={styles.paper}>
           <TextField
             label='title'
-            error={errors.title}
+            error={title}
             value={recipe.title}
-            helperText={errors.title ? helperText.title : null}
+            helperText={title ? helperText.title : null}
             onBlur={this.handleOnBlur('title')}
             handleInputChange={this.handleInputChange('title')}
           />
           <TextField
             label='ingredients'
             multiline
-            error={errors.ingredients}
+            error={ingredients}
             value={recipe.ingredients}
-            helperText={errors.ingredients ? helperText.ingredients : null}
+            helperText={ingredients ? helperText.ingredients : null}
             onBlur={this.handleOnBlur('ingredients')}
             handleInputChange={this.handleInputChange('ingredients')}
           />
           <TextField
             label='description'
             rows='10'
-            error={errors.description}
+            error={description}
             multiline
             value={recipe.description}
-            helperText={errors.description ? helperText.description : null}
+            helperText={description ? helperText.description : null}
             onBlur={this.handleOnBlur('description')}
             handleInputChange={this.handleInputChange('description')}
           />
           <CookingTimeField
-            error={errors.cookingTime}
+            error={cookingTime}
             value={recipe.cookingTime}
-            helperText={errors.cookingTime ? helperText.cookingTime : null}
+            helperText={cookingTime ? helperText.cookingTime : null}
             onBlur={this.handleOnBlur('cookingTime')}
             handleInputChange={this.handleInputChange('cookingTime')}
           />
           <TextField
             label='img URL'
-            error={errors.imgUrl}
+            error={imgUrl}
             value={recipe.imgUrl}
-            helperText={errors.imgUrl ? helperText.imgUrl : null}
+            helperText={imgUrl ? helperText.imgUrl : null}
             onBlur={this.handleOnBlur('imgUrl')}
             handleInputChange={this.handleInputChange('imgUrl')}
           />
@@ -191,6 +192,11 @@ class CreateRecipe extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     _addRecipe: (recipe) => dispatch(addRecipeAsyncActionCreator(recipe))
@@ -198,6 +204,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(CreateRecipe)

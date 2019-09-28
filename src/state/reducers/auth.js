@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
 
 import { addErrorWithSnackActionCreator } from './errors'
-import { getUsersAsyncActionCreator } from './users'
-import { SIGN_IN_URL, SIGN_UP_URL, REFRESH_TOKEN_URL, USERS_URL } from './constants'
+import { getUsersAsyncActionCreator, addUserAsyncActionCreator } from './users'
+import { SIGN_IN_URL, SIGN_UP_URL, REFRESH_TOKEN_URL } from './constants'
 
 const SIGNED_IN = 'auth/SIGNED_IN'
 const SIGNED_OUT = 'auth/SIGNED_OUT'
@@ -95,7 +95,7 @@ export const checkIfUserIsSignedInAsyncActionCreator = () => (dispatch, getState
   }
 }
 
-export const signUpAsyncActionCreator = (email, password) => (dispatch, getState) => {
+export const signUpAsyncActionCreator = (userName, email, password) => (dispatch, getState) => {
   dispatch(startFetchingActionCreator())
   return dispatch(authFetch(
     SIGN_UP_URL,
@@ -109,16 +109,9 @@ export const signUpAsyncActionCreator = (email, password) => (dispatch, getState
     }
   ))
     .then(data => {
-      const user = jwt.decode(data.idToken)
-      const key = user && user.user_id
-      if (key) {
-        fetchWithToken(
-          USERS_URL + key + '.json?',
-          {
-            method: 'PATCH',
-            body: JSON.stringify(user)
-          }
-        )
+      if (data && data.email && userName) {
+        const user = Object.assign(jwt.decode(data.idToken), { user_name: userName })
+        dispatch(addUserAsyncActionCreator(user))
       }
     })
 }

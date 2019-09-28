@@ -11,7 +11,6 @@ export const addErrorWithSnackActionCreator = data => dispatch => {
   if (message === 'EMAIL_EXISTS')
     dispatch(addSnackbarActionCreator('This email adress already exists. Please try another one.', 'red'))
 
-
   dispatch(addActionCreator(data))
 }
 

@@ -4,24 +4,16 @@ import { Paper, TextField, Button, Typography, CircularProgress, Divider } from 
 
 const styles = {
   paper: {
-    width: 350,
-    height: 350,
-    padding: 25,
-    paddingBottom: 10,
-    maxWidth: '95%',
+    width: 500,
+    height: 550,
+    maxWidth: '95vw',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
     position: 'relative'
   },
-  signUpButton: {
-    margin: '15px auto',
-    maxWidth: 100
-  },
   div: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -29,83 +21,97 @@ const styles = {
     width: '100vw'
   },
   divider: {
-    marginTop: 15,
+    marginTop: 10,
     marginBottom: 10
   },
-  signIn: {
+  signUp: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
-  button: {
+  signInButton: {
+    margin: 15,
+    width: 100
+  },
+  signUpButton: {
     margin: 5,
-    padding: 3
+    padding: 2,
+    width: 70
   },
   header: {
-    width: '100%',
+    width: '85%',
     textAlign: 'center',
+    margin: '15px auto',
+    position: 'absolute',
+    top: 0
+  },
+  form: {
+    width: '80%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    position: 'absolute'
   },
   footer: {
     position: 'absolute',
+    bottom: 0,
     width: '85%',
-    bottom: 10
+    margin: '10px auto'
   }
 }
 const SignIn = props => {
-  const enableSubmit = (
-    props.email.length > 0 &&
-    props.password.length > 0 &&
-    !props.errors.wrongEmail
-  )
-
+  const onEnter = event => {
+    if (event.key === 'Enter') {
+      props.handleSignIn()
+    }
+  }
   return (
     <div style={styles.div}>
       <Paper style={styles.paper}>
         <div style={styles.header}>
-          <Typography variant={'h5'}>
-            SIGN IN
-        </Typography>
+          <img src='https://i.imgur.com/NptUAPg.png' alt='damn-hungry-logo' />
           <Divider style={styles.divider} />
         </div>
-        <TextField
-          value={props.email}
-          onChange={props.handleChange('email')}
-          onKeyPress={event => { if (event.key === 'Enter' && enableSubmit) props.handleSignIn() }}
-          error={props.errors.wrongEmail}
-          fullWidth
-          variant={'outlined'}
-          margin={'dense'}
-          label={"email adress"}
-          helperText={props.errors.wrongEmail ? "Invalid email adress." : ''}
-        />
-        <TextField
-          value={props.password}
-          onChange={props.handleChange('password')}
-          onKeyPress={event => { if (event.key === 'Enter') props.handleSignIn() }}
-          fullWidth
-          variant={'outlined'}
-          margin={'dense'}
-          label={'password'}
-          type={'password'}
-        />
-        <Button
-          style={styles.signUpButton}
-          variant={'outlined'}
-          color={'primary'}
-          onClick={props.handleSignIn}
-          disabled={!enableSubmit}
-        >
-          {props._isFetching ? <CircularProgress size={25} /> : 'sign in'}
-        </Button>
+        <form style={styles.form}>
+          <TextField
+            value={props.email}
+            onChange={props.handleChange('email')}
+            onKeyPress={onEnter}
+            error={props.errors.email}
+            fullWidth
+            variant={'outlined'}
+            margin={'dense'}
+            label={"email adress"}
+          />
+          <TextField
+            value={props.password}
+            onChange={props.handleChange('password')}
+            onKeyPress={onEnter}
+            error={props.errors.password}
+            fullWidth
+            variant={'outlined'}
+            margin={'dense'}
+            label={'password'}
+            type={'password'}
+          />
+          <Button
+            style={styles.signInButton}
+            variant={'outlined'}
+            color={'primary'}
+            onClick={props.handleSignIn}
+          >
+            {props._isFetching ? <CircularProgress size={25} /> : 'sign in'}
+          </Button>
+        </form>
         <div style={styles.footer}>
           <Divider style={styles.divider} />
-          <div style={styles.signIn}>
+          <div style={styles.signUp}>
             <Typography variant='subtitle2'>
               Not a member yet?
             </Typography>
             <Button
               onClick={props.toggleForm}
-              style={styles.button}
+              style={styles.signUpButton}
               variant={'outlined'}
               color={'secondary'}
             >
