@@ -60,7 +60,11 @@ class NavBar extends React.Component {
             <MenuIcon />
           </IconButton>
           <Link to={'/'} style={styles.link}>
-            <img style={styles.img} src='https://i.imgur.com/NptUAPg.png' alt='damn-hungry-logo' />
+            <img
+              style={styles.img}
+              src='https://i.imgur.com/NptUAPg.png'
+              alt='damn-hungry-logo'
+            />
           </Link>
           <Link to={'/'} style={styles.link}>
             <Button

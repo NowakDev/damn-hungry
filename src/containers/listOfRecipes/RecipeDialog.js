@@ -32,26 +32,58 @@ const RecipeDialog = props => {
         scroll={'body'}
         aria-label="scroll-dialog-title"
       >
-        <img src={props.imgUrl} alt={`img ${props.title}`} style={styles.img} />
-        <DialogTitle style={styles.title} id="scroll-dialog-title">{props.title}</DialogTitle>
+        <img
+          src={props.imgUrl}
+          alt={`img ${props.title}`}
+          style={styles.img}
+        />
+        <DialogTitle
+          style={styles.title}
+          id="scroll-dialog-title"
+        >
+          {props.title}
+        </DialogTitle>
         <DialogContent>
-          <Typography style={styles.time} variant={"subtitle1"}>
+          <Typography
+            style={styles.time}
+            variant={"subtitle1"}
+          >
             <AccessTimeIcon
               style={{ marginRight: 5 }}
               fontSize='small'
             />
             {props.cookingTime} min
           </Typography>
-          <Typography variant={"subtitle2"}>By: {props.author}</Typography>
-          <Typography variant={"subtitle2"}>{props.date}</Typography>
+          <Typography
+            variant={"subtitle2"}
+          >
+            By: {props.author}
+          </Typography>
+          <Typography
+            variant={"subtitle2"}
+          >
+            {props.date}
+          </Typography>
           <Divider />
-          <Typography style={styles.ingredients} variant='subtitle1'><strong>Ingredients:</strong> {props.ingredients}</Typography>
+          <Typography
+            style={styles.ingredients}
+            variant='subtitle1'
+          >
+            <strong>
+              Ingredients:
+            </strong>
+            {`  ${props.ingredients}`}
+          </Typography>
           <DialogContentText>
             {props.description}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onClose} color="secondary" variant='outlined'>
+          <Button
+            onClick={props.onClose}
+            color="secondary"
+            variant='outlined'
+          >
             Close
           </Button>
         </DialogActions>

@@ -13,7 +13,7 @@ import { CircularProgress, Typography } from '@material-ui/core'
 const styles = {
   formContainer: {
     margin: 'auto',
-    marginTop: '10px',
+    marginTop: 10,
     display: 'flex',
     width: 500,
     maxWidth: '95vw',
@@ -128,8 +128,8 @@ class CreateRecipe extends React.Component {
 
   handleOnClick = () => {
     const { _users, _currentUser } = this.props
-    const author = _users && _currentUser && _users.filter(user => (
-      user.user_id === _currentUser.user_id))[0]
+    const author = _users && _currentUser && _users.filter(
+      user => (user.user_id === _currentUser.user_id))[0]
     const { recipe, errors } = this.state
 
     if (!recipe.title) {
@@ -206,6 +206,7 @@ class CreateRecipe extends React.Component {
       imgUrl: 'Pass a valid image url. Accepted formats: gif, jpg, png '
     }
     return (
+
       <div style={{ textAlign: 'center' }}>
         {this.props._isFetching ?
           <CircularProgress
@@ -216,7 +217,9 @@ class CreateRecipe extends React.Component {
           :
           <Paper style={styles.formContainer}>
             <div style={styles.div}>
-              <Typography>Share your idea:</Typography>
+              <Typography>
+                Share your idea:
+              </Typography>
               <TextField
                 label='title'
                 error={title}
@@ -230,6 +233,7 @@ class CreateRecipe extends React.Component {
               <TextField
                 label='ingredients'
                 multiline
+                rows='5'
                 error={ingredients}
                 value={recipe.ingredients}
                 helperText={helperText.ingredients}

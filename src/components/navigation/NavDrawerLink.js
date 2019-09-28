@@ -24,7 +24,11 @@ const NavDrawerLink = (props) => {
       onClick={props.toggleDrawerStatus}
       component={props.component}
     >
-      <ListItem button={true} style={styles.listItem} onClick={props.redirect}>
+      <ListItem
+        button={true}
+        style={styles.listItem}
+        onClick={props.redirect}
+      >
         <ListItemText primary={props.label} />
       </ListItem>
     </Link>

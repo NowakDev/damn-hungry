@@ -100,7 +100,11 @@ const SignIn = props => {
             color={'primary'}
             onClick={props.handleSignIn}
           >
-            {props._isFetching ? <CircularProgress size={25} /> : 'sign in'}
+            {props._isFetching ?
+              <CircularProgress size={25} />
+              :
+              'sign in'
+            }
           </Button>
         </form>
         <div style={styles.footer}>

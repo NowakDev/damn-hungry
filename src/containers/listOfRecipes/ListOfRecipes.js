@@ -28,7 +28,6 @@ const styles = {
   },
   gridList: {
     width: '100%',
-    marginBottom: 10,
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center'
@@ -67,11 +66,12 @@ class ListOfRecipes extends React.Component {
 
   componentDidMount() {
     const { key } = this.props.match.params
+
     this.props._getRecipes()
       .then(() => {
         if (key) {
-          const recipeToDisplay = this.props._recipes.filter(recipe => (
-            recipe.key === key)
+          const recipeToDisplay = this.props._recipes.filter(
+            recipe => (recipe.key === key)
           )
           this.setState({
             isDialogOpen: true,
@@ -83,8 +83,8 @@ class ListOfRecipes extends React.Component {
 
 
   handleOnClick = (key) => {
-    const clickedRecipe = this.props._recipes.filter(recipe => (
-      recipe.key === key)
+    const clickedRecipe = this.props._recipes.filter(
+      recipe => (recipe.key === key)
     )
     this.setState({
       isDialogOpen: true,
@@ -120,10 +120,19 @@ class ListOfRecipes extends React.Component {
     const { author, date, title, ingredients, description, cookingTime, imgUrl } = this.state.recipeToDisplay
     const { showUserRecipes, search } = this.state
     const { _isFetching, _recipes, _users, _currentUser } = this.props
-    const recipeAuthor = _users && _users.filter(user => user.user_id === _currentUser.user_id)[0]
-    const userRecipes = recipeAuthor && _recipes && _recipes.filter(recipe => recipe.author === recipeAuthor.user_name)
-    const filteredUserRecipes = userRecipes && userRecipes.filter(recipe => recipe.ingredients.toLowerCase().includes(search))
-    const findRecipes = _recipes && _recipes.filter(recipe => (recipe.ingredients.toLowerCase().includes(search)))
+
+    const recipeAuthor = _users && _users.filter(
+      user => user.user_id === _currentUser.user_id
+    )[0]
+    const userRecipes = recipeAuthor && _recipes && _recipes.filter(
+      recipe => recipe.author === recipeAuthor.user_name
+    )
+    const filteredUserRecipes = userRecipes && userRecipes.filter(
+      recipe => recipe.ingredients.toLowerCase().includes(search)
+    )
+    const findRecipes = _recipes && _recipes.filter(recipe => (
+      recipe.ingredients.toLowerCase().includes(search)
+    ))
 
     const filteredRecipes = showUserRecipes ?
       filteredUserRecipes || []

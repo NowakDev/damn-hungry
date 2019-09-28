@@ -18,7 +18,12 @@ const CookingTimeField = (props) => (
     onKeyPress={props.onKeyPress}
     onChange={props.handleInputChange}
     InputProps={{
-      endAdornment: <InputAdornment position="end">min</InputAdornment>,
+      endAdornment:
+        <InputAdornment
+          position="end"
+        >
+          min
+        </InputAdornment>
     }}
     inputProps={{
       min: '0',

@@ -1,8 +1,7 @@
 import React from 'react'
-
 import { connect } from 'react-redux'
-import { signInAsyncActionCreator, signUpAsyncActionCreator } from '../../state/reducers/auth'
 
+import { signInAsyncActionCreator, signUpAsyncActionCreator } from '../../state/reducers/auth'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 
@@ -206,8 +205,12 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  _signIn: (email, password) => dispatch(signInAsyncActionCreator(email, password)),
-  _signUp: (userName, email, password) => dispatch(signUpAsyncActionCreator(userName, email, password)),
+  _signIn: (email, password) => dispatch(
+    signInAsyncActionCreator(email, password)
+  ),
+  _signUp: (userName, email, password) => dispatch(
+    signUpAsyncActionCreator(userName, email, password)
+  ),
 })
 
 export default connect(

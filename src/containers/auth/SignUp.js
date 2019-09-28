@@ -132,7 +132,11 @@ const SignUp = props => {
             variant={'outlined'}
             color={'primary'}
           >
-            {props._isFetching ? <CircularProgress size={20} /> : 'sign up'}
+            {props._isFetching ?
+              <CircularProgress size={20} />
+              :
+              'sign up'
+            }
           </Button>
         </form>
         <div style={styles.footer}>
