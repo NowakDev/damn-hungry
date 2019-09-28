@@ -10,7 +10,7 @@ const Snackbar = props => {
       {props._snackbars.map((snackbar, index) => (
         <MuiSnackbar
           key={snackbar.key}
-          style={{ bottom: (30 + 70 * index), textAlign: 'center' }}
+          style={{ bottom: (20 + 55 * index) }}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'center',

@@ -3,17 +3,16 @@ import React from 'react'
 import MUIButton from '@material-ui/core/Button'
 
 const styles = {
-  marginTop: 30
+  marginTop: 30,
+  width: 150
 }
 
 const Button = props => {
   return (
     <MUIButton
       style={styles}
-      color="secondary"
+      color="primary"
       variant='outlined'
-      fullWidth
-      disabled={props.noError ? true : false}
       onClick={props.handleOnClick}
     >
       add recipe

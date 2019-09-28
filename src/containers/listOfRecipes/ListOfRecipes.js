@@ -17,17 +17,25 @@ const styles = {
   root: {
     display: 'flex',
     justifyContent: 'center',
-    margin: 5
+    position: 'relative'
   },
-  gridList: {
+  container: {
     maxWidth: 1000,
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
   },
+  gridList: {
+    width: '100%',
+    marginBottom: 10,
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
   recipe: {
-    width: '100%'
+    minWidth: 300,
+    width: document.body.clientWidth < 600 ? '100%' : '50%'
   },
   div: {
     display: 'flex',
@@ -37,7 +45,7 @@ const styles = {
     margin: '6px auto',
   },
   progress: {
-    marginTop: 50
+    marginTop: 100
   },
   img: {
     maxWidth: 600,
@@ -51,8 +59,8 @@ const styles = {
 
 class ListOfRecipes extends React.Component {
   state = {
-    isFetching: true,
     isDialogOpen: false,
+    showUserRecipes: false,
     recipeToDisplay: {},
     search: ''
   }
@@ -70,11 +78,6 @@ class ListOfRecipes extends React.Component {
             recipeToDisplay: recipeToDisplay[0]
           })
         }
-      }).then(() => {
-        this.setState({
-          ...this.state,
-          isFetching: false
-        })
       })
   }
 
@@ -105,36 +108,55 @@ class ListOfRecipes extends React.Component {
     })
   }
 
+  handleUserRecipes = () => {
+    this.setState({
+      ...this.state,
+      showUserRecipes: !this.state.showUserRecipes,
+      search: ''
+    })
+  }
+
   render() {
     const { author, date, title, ingredients, description, cookingTime, imgUrl } = this.state.recipeToDisplay
-    const { isFetching, search } = this.state
-    const { _recipes } = this.props
-    const filteredRecipes = _recipes.filter(recipe => (
-      recipe.ingredients.toLowerCase().includes(search)
-    ))
+    const { showUserRecipes, search } = this.state
+    const { _isFetching, _recipes, _users, _currentUser } = this.props
+    const recipeAuthor = _users && _users.filter(user => user.user_id === _currentUser.user_id)[0]
+    const userRecipes = recipeAuthor && _recipes && _recipes.filter(recipe => recipe.author === recipeAuthor.user_name)
+    const filteredUserRecipes = userRecipes && userRecipes.filter(recipe => recipe.ingredients.toLowerCase().includes(search))
+    const findRecipes = _recipes && _recipes.filter(recipe => (recipe.ingredients.toLowerCase().includes(search)))
+
+    const filteredRecipes = showUserRecipes ?
+      filteredUserRecipes || []
+      :
+      findRecipes
+
     return (
       <div style={styles.root}>
-        {isFetching ?
+        {_isFetching ?
           <CircularProgress
             style={styles.progress}
             size={50}
             color='secondary'
           />
           :
-          <div style={styles.gridList}>
+          (!_isFetching) && _recipes &&
+          <div style={styles.container}>
             <Filters
+              showUserRecipes={this.state.showUserRecipes}
+              handleUserRecipes={this.handleUserRecipes}
               handleSearch={this.handleSearch}
               value={this.state.search}
             />
-            {filteredRecipes.length === 0 ?
+            {!_isFetching && filteredRecipes && filteredRecipes.length === 0 ?
               <Typography>No results. Please try again.</Typography>
               :
               <GridList
                 cellHeight={200}
-                style={styles.recipe}
+                style={styles.gridList}
               >
-                {filteredRecipes.map((recipe) =>
+                {filteredRecipes && filteredRecipes.map((recipe) =>
                   <GridListTile
+                    style={styles.recipe}
                     component={Link}
                     to={`/recipes/${recipe.key}`}
                     key={recipe.key}
@@ -185,9 +207,11 @@ class ListOfRecipes extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state)
   return {
-    _recipes: state.recipes.data
+    _recipes: state.recipes.data,
+    _users: state.users.data,
+    _currentUser: state.auth.userData,
+    _isFetching: state.auth.isFetching
   }
 }
 

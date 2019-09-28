@@ -18,10 +18,6 @@ class Auth extends React.Component {
       emailError: false,
       passwordError: false,
       password1Error: false
-    },
-    signInErrors: {
-      email: false,
-      password: false
     }
   }
 
@@ -30,7 +26,7 @@ class Auth extends React.Component {
   )
 
   handleSignIn = () => {
-    if (this.state.password)
+    if (this.state.email && this.state.password)
       this.props._signIn(this.state.email, this.state.password)
         .then(() => (
           this.setState({
@@ -43,9 +39,31 @@ class Auth extends React.Component {
   handleSignUp = () => {
     const { userName, email, password, password1 } = this.state
     const { userNameError, emailError, passwordError, password1Error } = this.state.signUpErrors
+    if (password !== password1) {
+      this.setState({
+        signUpErrors: {
+          ...this.state.signUpErrors,
+          password1Error: true
+        }
+      })
+    } else if (!userName) {
+      this.setState({
+        signUpErrors: {
+          ...this.state.signUpErrors,
+          userNameError: true
+        }
+      })
+    } else if (!email) {
+      this.setState({
+        signUpErrors: {
+          ...this.state.signUpErrors,
+          emailError: true
+        }
+      })
+    }
 
     if (!userNameError && !emailError && !passwordError && !password1Error) {
-      if (userName && email && password && password1)
+      if (userName && email && password && password1 && password === password1)
         this.props._signUp(this.state.userName, this.state.email, this.state.password)
           .then(() => (
             this.setState({
@@ -54,6 +72,12 @@ class Auth extends React.Component {
               password1: ''
             })
           ))
+          .then(() => {
+            this.setState({
+              ...this.state,
+              showSignIn: true
+            })
+          })
     }
   }
 
@@ -118,6 +142,24 @@ class Auth extends React.Component {
     this.formValidation(name, event)
   }
 
+  handleOnFocus = (name) => () => {
+    this.setState({
+      signUpErrors: {
+        ...this.state.signUpErrors,
+        [name]: false
+      }
+    })
+  }
+
+  onEnter = event => {
+    if (event.key === 'Enter') {
+      this.state.showSignIn ?
+        this.handleSignIn()
+        :
+        this.handleSignUp()
+    }
+  }
+
   render() {
     return (
       <div>
@@ -137,7 +179,9 @@ class Auth extends React.Component {
               />
               :
               <SignUp
+                onKeyPress={this.onEnter}
                 onBlur={this.handleOnBlur}
+                onFocus={this.handleOnFocus}
                 userName={this.state.userName}
                 email={this.state.email}
                 password={this.state.password}
@@ -147,7 +191,6 @@ class Auth extends React.Component {
                 toggleForm={this.toggleForm}
                 errors={this.state.signUpErrors}
                 _isFetching={this.props._isFetching}
-                toggleForgotPassword={this.toggleForgotPassword}
               />
         }
       </div>

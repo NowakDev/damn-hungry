@@ -12,7 +12,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime'
 
 const styles = {
   img: {
-    width: '100%'
+    width: '100%',
   },
   ingredients: {
     margin: '20px auto'

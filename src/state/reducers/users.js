@@ -1,5 +1,5 @@
 import { fetchWithToken, } from './auth'
-import { mapObjectToArray } from '../../services/mapObjectToArray'
+import { mapObjectToArray } from '../../utilities/mapObjectToArray'
 import { USERS_URL } from './constants'
 
 const GET = 'users/GET'
@@ -30,7 +30,7 @@ const getActionCreator = (data) => ({
 })
 
 const initialState = {
-  data: null
+  data: []
 }
 
 export default (state = initialState, action) => {

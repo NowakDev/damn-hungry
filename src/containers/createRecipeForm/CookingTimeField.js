@@ -14,6 +14,8 @@ const CookingTimeField = (props) => (
     error={props.error}
     value={props.cookingTime}
     onBlur={props.onBlur}
+    onFocus={props.onFocus}
+    onKeyPress={props.onKeyPress}
     onChange={props.handleInputChange}
     InputProps={{
       endAdornment: <InputAdornment position="end">min</InputAdornment>,

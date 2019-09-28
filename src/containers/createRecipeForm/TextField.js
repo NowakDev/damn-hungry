@@ -12,8 +12,10 @@ const TextField = (props) => (
     error={props.error}
     rows={props.rows}
     value={props.value}
+    onKeyPress={props.onKeyPress}
     onChange={props.handleInputChange}
     onBlur={props.onBlur}
+    onFocus={props.onFocus}
     label={props.label}
     multiline={props.multiline}
   />

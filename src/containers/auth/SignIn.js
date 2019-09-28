@@ -59,12 +59,14 @@ const styles = {
     margin: '10px auto'
   }
 }
+
 const SignIn = props => {
   const onEnter = event => {
     if (event.key === 'Enter') {
       props.handleSignIn()
     }
   }
+
   return (
     <div style={styles.div}>
       <Paper style={styles.paper}>
@@ -77,7 +79,6 @@ const SignIn = props => {
             value={props.email}
             onChange={props.handleChange('email')}
             onKeyPress={onEnter}
-            error={props.errors.email}
             fullWidth
             variant={'outlined'}
             margin={'dense'}
@@ -87,7 +88,6 @@ const SignIn = props => {
             value={props.password}
             onChange={props.handleChange('password')}
             onKeyPress={onEnter}
-            error={props.errors.password}
             fullWidth
             variant={'outlined'}
             margin={'dense'}

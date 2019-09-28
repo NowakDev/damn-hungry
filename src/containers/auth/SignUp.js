@@ -31,6 +31,7 @@ const styles = {
   },
   signUpButton: {
     margin: 15,
+    marginBottom: 0,
     width: 100
   },
   signInButton: {
@@ -74,52 +75,56 @@ const SignUp = props => {
           <TextField
             value={props.userName}
             onBlur={props.onBlur('userNameError')}
+            onFocus={props.onFocus('userNameError')}
             onChange={props.handleChange('userName')}
+            onKeyPress={props.onKeyPress}
             error={props.errors.userNameError}
             fullWidth
             variant={'outlined'}
             margin={'dense'}
             label={"user name"}
-            helperText={props.errors.userNameError ?
-              "May include letters, numbers and underscore. Length of 3 to 20 characters."
-              :
-              ''
-            }
+            helperText={"May include (A-Z a-z 0-9 _ -). Length of 3 to 20 characters."}
           />
           <TextField
             value={props.email}
             onBlur={props.onBlur('emailError')}
+            onFocus={props.onFocus('emailError')}
             onChange={props.handleChange('email')}
+            onKeyPress={props.onKeyPress}
             error={props.errors.emailError}
             fullWidth
             variant={'outlined'}
             margin={'dense'}
             label={"email"}
-            helperText={props.errors.emailError ? "Invalid email." : ''}
+            helperText={"Invalid email."}
           />
           <TextField
             value={props.password}
             onBlur={props.onBlur('passwordError')}
+            onFocus={props.onFocus('passwordError')}
             onChange={props.handleChange('password')}
+            onKeyPress={props.onKeyPress}
             error={props.errors.passwordError}
             fullWidth
             variant={'outlined'}
             margin={'dense'}
             label={'password'}
             type={'password'}
-            helperText={props.errors.passwordError ? "Password should contain at least 6 characters." : ''}
+            helperText={"Password should contain at least 6 characters."}
           />
           <TextField
             value={props.password1}
             onBlur={props.onBlur('password1Error')}
+            onFocus={props.onFocus('password1Error')}
             onChange={props.handleChange('password1')}
+            onKeyPress={props.onKeyPress}
             error={props.errors.password1Error}
             fullWidth
             variant={'outlined'}
             margin={'dense'}
             label={'confirm password'}
             type={'password'}
-            helperText={props.errors.password1Error ? "Both passwords must be equal." : ''}
+            helperText={"Both passwords must be equal."}
           />
           <Button
             onClick={props.handleSignUp}

@@ -113,6 +113,12 @@ export const signUpAsyncActionCreator = (userName, email, password) => (dispatch
         const user = Object.assign(jwt.decode(data.idToken), { user_name: userName })
         dispatch(addUserAsyncActionCreator(user))
       }
+      return data
+    })
+    .then(data => {
+      if (data.error) {
+        return Promise.reject(data)
+      }
     })
 }
 

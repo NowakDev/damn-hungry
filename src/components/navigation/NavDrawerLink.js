@@ -18,8 +18,13 @@ const styles = {
 
 const NavDrawerLink = (props) => {
   return (
-    <Link to={props.to} style={styles.link} onClick={props.toggleDrawerStatus}>
-      <ListItem button={true} style={styles.listItem}>
+    <Link
+      to={props.to}
+      style={styles.link}
+      onClick={props.toggleDrawerStatus}
+      component={props.component}
+    >
+      <ListItem button={true} style={styles.listItem} onClick={props.redirect}>
         <ListItemText primary={props.label} />
       </ListItem>
     </Link>

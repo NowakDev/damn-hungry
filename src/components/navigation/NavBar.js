@@ -28,10 +28,11 @@ const styles = {
   },
   img: {
     marginTop: 5,
-    maxHeight: 70
+    height: document.body.clientWidth < 400 ? 50 : 70
   },
   button: {
-    padding: '10px 0'
+    padding: '10px 0',
+    width: document.body.clientWidth < 400 ? 50 : 80
   }
 }
 
@@ -64,6 +65,7 @@ class NavBar extends React.Component {
           <Link to={'/'} style={styles.link}>
             <Button
               style={styles.button}
+              size='small'
               color="inherit"
               onClick={this.props._signOut}
             >
