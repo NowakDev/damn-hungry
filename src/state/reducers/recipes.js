@@ -1,6 +1,5 @@
 import { fetchWithToken } from './auth'
 import { mapObjectToArray } from '../../utilities/mapObjectToArray'
-import { addSnackbarActionCreator } from './snackbars'
 import { RECIPES_URL } from './constants'
 
 const GET = 'recipes/GET'
@@ -24,12 +23,8 @@ export const addRecipeAsyncActionCreator = (recipe, queryString, withSnackbars =
       body: JSON.stringify(recipe)
     }
   ))
-    .then((data) => {
+    .then(() => {
       dispatch(stopFetchingActionCreator())
-      if (withSnackbars) {
-        return dispatch(addSnackbarActionCreator('Recipe successfully added.', 'green'))
-      }
-      return data
     })
 }
 

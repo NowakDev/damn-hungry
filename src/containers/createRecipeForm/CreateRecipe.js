@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper'
 import { CircularProgress, Typography } from '@material-ui/core'
 
 import { addSnackbarActionCreator } from '../../state/reducers/snackbars'
-import { addRecipeAsyncActionCreator } from '../../state/reducers/recipes'
+import { addRecipeAsyncActionCreator, getRecipesAsyncActionCreator } from '../../state/reducers/recipes'
 import CookingTimeField from './CookingTimeField'
 import TextField from './TextField'
 import Button from '../../components/buttons/Button'
@@ -143,11 +143,15 @@ class CreateRecipe extends React.Component {
         }
       }, () => {
         this.props._addRecipe(this.state.recipe)
-        setTimeout(
-          this.setState({
-            ...this.state,
-            redirect: true
-          }), 2000)
+          .then(() => {
+            this.setState({
+              ...this.state,
+              redirect: true
+            }, () => {
+              this.props._snackbar('Recipe successfully added.', 'green')
+            })
+            this.props._getRecipes()
+          })
       })
     }
   }
@@ -277,6 +281,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     _addRecipe: (recipe) => dispatch(addRecipeAsyncActionCreator(recipe)),
+    _getRecipes: () => dispatch(getRecipesAsyncActionCreator()),
     _snackbar: (text, color) => dispatch(addSnackbarActionCreator(text, color))
   }
 }
