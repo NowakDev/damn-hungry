@@ -54,6 +54,9 @@ const styles = {
     height: '100%',
     objectFit: 'cover',
     overflow: 'hidden'
+  },
+  span: {
+    marginLeft: 20
   }
 }
 
@@ -118,7 +121,7 @@ class ListOfRecipes extends React.Component {
   }
 
   render() {
-    const { author, date, title, ingredients, description, cookingTime, imgUrl } = this.state.recipeToDisplay
+    const { author, date, title, ingredients, description, cookingTime, img } = this.state.recipeToDisplay
     const { showUserRecipes, search } = this.state
     const { _isFetching, _recipes, _users, _currentUser } = this.props
 
@@ -174,14 +177,14 @@ class ListOfRecipes extends React.Component {
                   >
                     <img
                       style={styles.img}
-                      src={recipe.imgUrl}
+                      src={recipe.img}
                       alt={`img ${recipe.title}`}
                     />
                     <GridListTileBar
                       title={recipe.title}
                       subtitle={
                         <div>
-                          <span>by: {recipe.author}</span>
+                          <span>By: {recipe.author}</span>
                           <div
                             style={styles.div}
                           >
@@ -190,7 +193,10 @@ class ListOfRecipes extends React.Component {
                               fontSize='small'
                             />
                             {recipe.cookingTime} min
-                      </div>
+                            <div style={styles.span}>
+                              <strong>Ingredients:</strong> {recipe.ingredients}
+                            </div>
+                          </div>
                         </div>
                       }
                     />
@@ -205,7 +211,7 @@ class ListOfRecipes extends React.Component {
                   ingredients={ingredients}
                   description={description}
                   cookingTime={cookingTime}
-                  imgUrl={imgUrl}
+                  img={img}
                 />
               </GridList>
             }

@@ -1,14 +1,17 @@
 import React from 'react'
 import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
-import { addRecipeAsyncActionCreator } from '../../state/reducers/recipes'
 
+import Paper from '@material-ui/core/Paper'
+import { CircularProgress, Typography } from '@material-ui/core'
+
+import { addSnackbarActionCreator } from '../../state/reducers/snackbars'
+import { addRecipeAsyncActionCreator } from '../../state/reducers/recipes'
 import CookingTimeField from './CookingTimeField'
 import TextField from './TextField'
-import Paper from '@material-ui/core/Paper'
-
 import Button from '../../components/buttons/Button'
-import { CircularProgress, Typography } from '@material-ui/core'
+import UploadImageButton from './UploadImageButton'
+
 
 const styles = {
   container: {
@@ -38,14 +41,13 @@ const initialState = {
     cookingTime: null,
     date: '',
     description: '',
-    imgUrl: '',
     ingredients: '',
-    title: ''
+    title: '',
+    img: ''
   },
   errors: {
     cookingTime: false,
     description: false,
-    imgUrl: false,
     ingredients: false,
     title: false
   },
@@ -54,12 +56,6 @@ const initialState = {
 
 class CreateRecipe extends React.Component {
   state = initialState
-
-  clearInputs = () => {
-    this.setState({
-      ...initialState
-    })
-  }
 
   handleInputChange = (name) => (event) => {
     const value = event.target.value.trim() ?
@@ -75,7 +71,7 @@ class CreateRecipe extends React.Component {
   }
 
   formValidation = (name, event) => {
-    const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/
+
     switch (true) {
       case name !== 'cookingTime'
         && name !== 'imgUrl'
@@ -89,15 +85,6 @@ class CreateRecipe extends React.Component {
         break
       case name === 'cookingTime'
         && (event.target.value < 10 || event.target.value > 300):
-        this.setState({
-          errors: {
-            ...this.state.errors,
-            [name]: true
-          }
-        })
-        break
-      case name === 'imgUrl'
-        && !imgRegex.test(event.target.value):
         this.setState({
           errors: {
             ...this.state.errors,
@@ -136,61 +123,58 @@ class CreateRecipe extends React.Component {
       user => (user.user_id === _currentUser.user_id))[0]
     const { recipe, errors } = this.state
 
-    if (!recipe.title) {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          title: true
-        }
-      })
-    } else if (!recipe.ingredients) {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          ingredients: true
-        }
-      })
-    } else if (!recipe.description) {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          description: true
-        }
-      })
-    } else if (!recipe.cookingTime) {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          cookingTime: true
-        }
-      })
-    } else if (!recipe.imgUrl) {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          imgUrl: true
-        }
-      })
+    const noEmptyField = recipe.cookingTime && recipe.description &&
+      recipe.img && recipe.ingredients && recipe.title
+
+    const noError = !errors.cookingTime && !errors.description &&
+      !errors.ingredients && !errors.title
+
+    if (!noEmptyField || !noError) {
+      this.props._snackbar('Fill in all fields according to instructions and upload an image.', 'red')
     }
 
-    if (recipe.cookingTime && recipe.description && recipe.imgUrl && recipe.ingredients && recipe.title)
-      if (!errors.cookingTime && !errors.description && !errors.imgUrl && !errors.ingredients && !errors.title) {
-        const date = Date().substring(0, 24)
-        this.setState({
-          recipe: {
-            ...this.state.recipe,
-            author: author && author.user_name,
-            date: date
-          }
-        }, () => {
-          this.props._addRecipe(this.state.recipe)
-          this.clearInputs()
+    if (noEmptyField && noError) {
+      const date = Date().substring(0, 24)
+      this.setState({
+        recipe: {
+          ...this.state.recipe,
+          author: author && author.user_name,
+          date: date
+        }
+      }, () => {
+        this.props._addRecipe(this.state.recipe)
+        setTimeout(
           this.setState({
             ...this.state,
             redirect: true
-          })
-        })
+          }), 2000)
+      })
+    }
+  }
+
+  onImageUpload = (event) => {
+    const imageData = event.target.files[0]
+    const validation = imageData && (
+      imageData.name.toLowerCase().endsWith('.jpg') ||
+      imageData.name.toLowerCase().endsWith('.png')
+    ) && imageData.type.includes('image')
+
+    if (imageData && !validation) {
+      this.props._snackbar('Accepted image formats: .jpg, .png', 'red')
+    }
+
+    if (imageData && validation) {
+      const reader = new FileReader()
+      reader.readAsDataURL(imageData)
+      reader.onload = (upload) => {
+        this.setState({
+          recipe: {
+            ...this.state.recipe,
+            img: upload.target.result
+          }
+        }, () => this.props._snackbar('Image successfully uploaded.', 'green'))
       }
+    }
   }
 
   onEnter = event => {
@@ -201,16 +185,14 @@ class CreateRecipe extends React.Component {
 
   render() {
     const { recipe } = this.state
-    const { title, ingredients, description, cookingTime, imgUrl } = this.state.errors
+    const { title, ingredients, description, cookingTime } = this.state.errors
     const helperText = {
       title: 'Pass a title which describes your meal.',
       ingredients: 'Pass all ingredients in your meal.',
       description: 'Describe steps needed to prepare your meal.',
       cookingTime: 'Pass approximate cooking time in minutes.',
-      imgUrl: 'Pass a valid image url. Accepted formats: gif, jpg, png '
     }
     return (
-
       <div style={styles.container}>
         {this.props._isFetching ?
           <CircularProgress
@@ -267,15 +249,8 @@ class CreateRecipe extends React.Component {
                 onKeyPress={this.onEnter}
                 handleInputChange={this.handleInputChange('cookingTime')}
               />
-              <TextField
-                label='img URL'
-                error={imgUrl}
-                value={recipe.imgUrl}
-                helperText={helperText.imgUrl}
-                onBlur={this.handleOnBlur('imgUrl')}
-                onFocus={this.handleOnFocus('imgUrl')}
-                onKeyPress={this.onEnter}
-                handleInputChange={this.handleInputChange('imgUrl')}
+              <UploadImageButton
+                onImageUpload={this.onImageUpload}
               />
               <Button
                 handleOnClick={this.handleOnClick}
@@ -301,7 +276,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    _addRecipe: (recipe) => dispatch(addRecipeAsyncActionCreator(recipe))
+    _addRecipe: (recipe) => dispatch(addRecipeAsyncActionCreator(recipe)),
+    _snackbar: (text, color) => dispatch(addSnackbarActionCreator(text, color))
   }
 }
 

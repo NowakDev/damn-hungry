@@ -33,12 +33,11 @@ const RecipeDialog = props => {
         aria-label="scroll-dialog-title"
       >
         <img
-          src={props.imgUrl}
+          src={props.img}
           alt={`img ${props.title}`}
           style={styles.img}
         />
         <DialogTitle
-          style={styles.title}
           id="scroll-dialog-title"
         >
           {props.title}

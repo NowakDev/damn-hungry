@@ -15,10 +15,11 @@ export const getUsersAsyncActionCreator = (queryString = '') => (dispatch, getSt
 }
 
 export const addUserAsyncActionCreator = (user) => (dispatch, getState) => {
+  const userId = user.user_id
 
-  return dispatch(fetchWithToken(USERS_URL + '.json?',
+  return dispatch(fetchWithToken(USERS_URL + userId + '.json?',
     {
-      method: 'POST',
+      method: 'PATCH',
       body: JSON.stringify(user)
     }
   ))

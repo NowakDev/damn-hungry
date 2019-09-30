@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { signInAsyncActionCreator, signUpAsyncActionCreator } from '../../state/reducers/auth'
+import { addSnackbarActionCreator } from '../../state/reducers/snackbars'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 
@@ -25,6 +26,10 @@ class Auth extends React.Component {
   )
 
   handleSignIn = () => {
+    if (!this.state.email || !this.state.password) {
+      this.props._snackbar('Enter your email and password.', 'red')
+    }
+
     if (this.state.email && this.state.password)
       this.props._signIn(this.state.email, this.state.password)
         .then(() => (
@@ -38,45 +43,29 @@ class Auth extends React.Component {
   handleSignUp = () => {
     const { userName, email, password, password1 } = this.state
     const { userNameError, emailError, passwordError, password1Error } = this.state.signUpErrors
-    if (password !== password1) {
-      this.setState({
-        signUpErrors: {
-          ...this.state.signUpErrors,
-          password1Error: true
-        }
-      })
-    } else if (!userName) {
-      this.setState({
-        signUpErrors: {
-          ...this.state.signUpErrors,
-          userNameError: true
-        }
-      })
-    } else if (!email) {
-      this.setState({
-        signUpErrors: {
-          ...this.state.signUpErrors,
-          emailError: true
-        }
-      })
+
+    const noEmptyField = userName && email && password && password1 && password === password1
+    const noError = !userNameError && !emailError && !passwordError && !password1Error
+
+    if (!noEmptyField || !noError) {
+      this.props._snackbar('Fill in all fields according to instructions.', 'red')
     }
 
-    if (!userNameError && !emailError && !passwordError && !password1Error) {
-      if (userName && email && password && password1 && password === password1)
-        this.props._signUp(this.state.userName, this.state.email, this.state.password)
-          .then(() => (
-            this.setState({
-              ...this.state,
-              password: '',
-              password1: ''
-            })
-          ))
-          .then(() => {
-            this.setState({
-              ...this.state,
-              showSignIn: true
-            })
+    if (noEmptyField && noError) {
+      this.props._signUp(this.state.userName, this.state.email, this.state.password)
+        .then(() => (
+          this.setState({
+            ...this.state,
+            password: '',
+            password1: ''
           })
+        ))
+        .then(() => {
+          this.setState({
+            ...this.state,
+            showSignIn: true
+          })
+        })
     }
   }
 
@@ -211,6 +200,8 @@ const mapDispatchToProps = dispatch => ({
   _signUp: (userName, email, password) => dispatch(
     signUpAsyncActionCreator(userName, email, password)
   ),
+  _snackbar: (text, color) => dispatch(
+    addSnackbarActionCreator(text, color))
 })
 
 export default connect(

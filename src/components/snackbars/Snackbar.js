@@ -7,10 +7,9 @@ import { SnackbarContent } from '@material-ui/core'
 const Snackbar = props => {
   return (
     <div>
-      {props._snackbars.map((snackbar, index) => (
+      {props._snackbars.map((snackbar) => (
         <MuiSnackbar
           key={snackbar.key}
-          style={{ bottom: (20 + 55 * index) }}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'center',
@@ -18,7 +17,12 @@ const Snackbar = props => {
           open={true}
         >
           <SnackbarContent
-            style={{ backgroundColor: snackbar.color }}
+            style={{
+              backgroundColor: snackbar.color,
+              boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.5)',
+              textAlign: 'center',
+              margin: 10
+            }}
             message={snackbar.text}
           />
         </MuiSnackbar>
