@@ -57,6 +57,11 @@ const styles = {
   },
   span: {
     marginLeft: 20
+  },
+  createRecipeLink: {
+    textDecoration: 'none',
+    color: 'red',
+    fontSize: 25
   }
 }
 
@@ -129,7 +134,7 @@ class ListOfRecipes extends React.Component {
       user => user.user_id === _currentUser.user_id
     )[0]
     const userRecipes = recipeAuthor && _recipes && _recipes.filter(
-      recipe => recipe.author === recipeAuthor.user_name
+      recipe => recipe.author_id === recipeAuthor.user_id
     )
     const filteredUserRecipes = userRecipes && userRecipes.filter(
       recipe => recipe.ingredients.toLowerCase().includes(search)
@@ -161,7 +166,14 @@ class ListOfRecipes extends React.Component {
               value={this.state.search}
             />
             {!_isFetching && filteredRecipes && filteredRecipes.length === 0 ?
-              <Typography>No results. Please try again.</Typography>
+              showUserRecipes && filteredUserRecipes.length === 0 ?
+                <Typography>You don't have any recipes yet.{' '}
+                  <Link style={styles.createRecipeLink} to={'/create-recipe'}>
+                    Share your idea.
+                  </Link>
+                </Typography>
+                :
+                <Typography>No results. Please try again.</Typography>
               :
               <GridList
                 cellHeight={200}

@@ -38,6 +38,7 @@ const styles = {
 const initialState = {
   recipe: {
     author: '',
+    author_id: '',
     cookingTime: null,
     date: '',
     description: '',
@@ -139,6 +140,7 @@ class CreateRecipe extends React.Component {
         recipe: {
           ...this.state.recipe,
           author: author && author.user_name,
+          author_id: author && author.user_id,
           date: date
         }
       }, () => {

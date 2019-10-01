@@ -96,7 +96,7 @@ const SignUp = props => {
             variant={'outlined'}
             margin={'dense'}
             label={"email"}
-            helperText={"Invalid email."}
+            helperText={"Enter your email adress."}
           />
           <TextField
             value={props.password}
