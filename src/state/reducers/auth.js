@@ -116,6 +116,7 @@ export const signUpAsyncActionCreator = (userName, email, password) => (dispatch
       return data
     })
     .then(data => {
+      dispatch(getUsersAsyncActionCreator())
       if (data.error) {
         return Promise.reject(data)
       }

@@ -62,6 +62,10 @@ const styles = {
     textDecoration: 'none',
     color: 'red',
     fontSize: 25
+  },
+  text: {
+    textAlign: 'center',
+    width: 240
   }
 }
 
@@ -147,7 +151,6 @@ class ListOfRecipes extends React.Component {
       filteredUserRecipes || []
       :
       findRecipes
-
     return (
       <div style={styles.root}>
         {_isFetching ?
@@ -165,67 +168,70 @@ class ListOfRecipes extends React.Component {
               handleSearch={this.handleSearch}
               value={this.state.search}
             />
-            {!_isFetching && filteredRecipes && filteredRecipes.length === 0 ?
-              showUserRecipes && userRecipes && userRecipes.length === 0 ?
-                <Typography>You don't have any recipes yet.{' '}
-                  <Link style={styles.createRecipeLink} to={'/create-recipe'}>
-                    Share your idea.
-                  </Link>
-                </Typography>
-                :
-                <Typography>No results. Please try again.</Typography>
-              :
-              <GridList
-                cellHeight={200}
-                style={styles.gridList}
+            {showUserRecipes && userRecipes && userRecipes.length === 0 ?
+              <Typography
+                style={styles.text}
               >
-                {filteredRecipes && filteredRecipes.map((recipe) =>
-                  <GridListTile
-                    style={styles.recipe}
-                    component={Link}
-                    to={`/recipes/${recipe.key}`}
-                    key={recipe.key}
-                    onClick={() => this.handleOnClick(recipe.key)}
-                  >
-                    <img
-                      style={styles.img}
-                      src={recipe.img}
-                      alt={`img ${recipe.title}`}
-                    />
-                    <GridListTileBar
-                      title={recipe.title}
-                      subtitle={
-                        <div>
-                          <span>By: {recipe.author}</span>
-                          <div
-                            style={styles.div}
-                          >
-                            <AccessTimeIcon
-                              style={{ marginRight: 5 }}
-                              fontSize='small'
-                            />
-                            {recipe.cookingTime} min
+                You don't have any recipes yet.{' '}
+                <Link style={styles.createRecipeLink} to={'/create-recipe'}>
+                  <strong>Share your idea.</strong>
+                </Link>
+              </Typography>
+              :
+              !_isFetching && filteredRecipes && filteredRecipes.length === 0 ?
+                <Typography>No results. Please try again.</Typography>
+                :
+                <GridList
+                  cellHeight={200}
+                  style={styles.gridList}
+                >
+                  {filteredRecipes && filteredRecipes.map((recipe) =>
+                    <GridListTile
+                      style={styles.recipe}
+                      component={Link}
+                      to={`/recipes/${recipe.key}`}
+                      key={recipe.key}
+                      onClick={() => this.handleOnClick(recipe.key)}
+                    >
+                      <img
+                        style={styles.img}
+                        src={recipe.img}
+                        alt={`img ${recipe.title}`}
+                      />
+                      <GridListTileBar
+                        title={recipe.title}
+                        subtitle={
+                          <div>
+                            <span>By: {recipe.author}</span>
+                            <div
+                              style={styles.div}
+                            >
+                              <AccessTimeIcon
+                                style={{ marginRight: 5 }}
+                                fontSize='small'
+                              />
+                              {recipe.cookingTime} min
                             <div style={styles.span}>
-                              <strong>Ingredients:</strong> {recipe.ingredients}
+                                <strong>Ingredients:</strong> {recipe.ingredients}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      }
-                    />
-                  </GridListTile>
-                )}
-                <RecipeDialog
-                  onClose={this.handleOnClose}
-                  open={this.state.isDialogOpen}
-                  author={author}
-                  title={title}
-                  date={date}
-                  ingredients={ingredients}
-                  description={description}
-                  cookingTime={cookingTime}
-                  img={img}
-                />
-              </GridList>
+                        }
+                      />
+                    </GridListTile>
+                  )}
+                  <RecipeDialog
+                    onClose={this.handleOnClose}
+                    open={this.state.isDialogOpen}
+                    author={author}
+                    title={title}
+                    date={date}
+                    ingredients={ingredients}
+                    description={description}
+                    cookingTime={cookingTime}
+                    img={img}
+                  />
+                </GridList>
             }
           </div>
         }
