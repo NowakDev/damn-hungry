@@ -166,7 +166,7 @@ class ListOfRecipes extends React.Component {
               value={this.state.search}
             />
             {!_isFetching && filteredRecipes && filteredRecipes.length === 0 ?
-              showUserRecipes && filteredUserRecipes.length === 0 ?
+              showUserRecipes && userRecipes && userRecipes.length === 0 ?
                 <Typography>You don't have any recipes yet.{' '}
                   <Link style={styles.createRecipeLink} to={'/create-recipe'}>
                     Share your idea.
